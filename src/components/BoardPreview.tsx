@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react'
 import { COLORS, type Card, type Color, type Cost, type GemColor, type Motif, type Noble, type Player, type Game, type Tier } from '../game/game'
+
+type Tier3Art = Record<string, { name: string; image: string }>
 
 const GEM_NAMES: Record<GemColor, string> = {
   red: 'Ruby', blue: 'Sapphire', green: 'Emerald', white: 'Diamond', black: 'Onyx', gold: 'Gold',
@@ -36,15 +39,16 @@ interface MarketActions { buy?: () => void; reserve?: () => void; close: () => v
 interface ReservedActions { buy?: () => void; close: () => void }
 interface DeckActions { reserve: () => void; close: () => void }
 
-function MarketCard({ card, onClick, selected, reservable, actions }: { card: Card; onClick?: () => void; selected?: boolean; reservable?: boolean; actions?: MarketActions }) {
+function MarketCard({ card, art, onClick, selected, reservable, actions }: { card: Card; art?: Tier3Art[string]; onClick?: () => void; selected?: boolean; reservable?: boolean; actions?: MarketActions }) {
+  const name = art?.name ?? card.name
   return <div className="market-card-shell">
-    <button type="button" onClick={onClick} aria-pressed={selected} className={`market-card scene-${card.motif}${selected ? ' selected-card' : ''}${reservable ? ' reservable-card' : ''}`} aria-label={`${card.name}, tier ${card.tier}, ${card.points} points, ${card.bonus} bonus${reservable ? ', click to reserve' : ''}`}>
+    <button type="button" onClick={onClick} aria-pressed={selected} className={`market-card scene-${card.motif}${selected ? ' selected-card' : ''}${reservable ? ' reservable-card' : ''}`} aria-label={`${name}, tier ${card.tier}, ${card.points} points, ${card.bonus} bonus${reservable ? ', click to reserve' : ''}`}>
       <div className="card-top"><span className="point-badge" aria-label={`${card.points} points`}>{card.points}</span><span className="bonus-badge" aria-label={`${card.bonus} bonus`}><Gem color={card.bonus} small /></span></div>
-      <div className="card-art"><span className="art-hill hill-back" /><span className="art-hill hill-front" /><CardMotif motif={card.motif} /></div>
-      <div className="card-name">{card.name}</div>
+      <div className="card-art">{art ? <img className="card-art-image" src={art.image} alt="" loading="lazy" /> : <><span className="art-hill hill-back" /><span className="art-hill hill-front" /><CardMotif motif={card.motif} /></>}</div>
+      <div className="card-name" title={name}>{name}</div>
       <CostList cost={card.cost} />
     </button>
-    {selected && actions && <div className="card-actions-overlay" role="group" aria-label={`Actions for ${card.name}`}>
+    {selected && actions && <div className="card-actions-overlay" role="group" aria-label={`Actions for ${name}`}>
       <button type="button" className="card-overlay-close" onClick={actions.close} aria-label="Close card actions">✕</button>
       {actions.buy && <button type="button" onClick={actions.buy}>Buy</button>}
       {actions.reserve && <button type="button" onClick={actions.reserve}>Reserve</button>}
@@ -95,13 +99,15 @@ function GemBank({ bank, held, selected, selectedDiscards, onGem, onGold, onDisc
   </section>
 }
 
-function ReservedCard({ card, hidden, onClick }: { card: Card; hidden: boolean; onClick?: () => void }) {
+function ReservedCard({ card, art, hidden, onClick }: { card: Card; art?: Tier3Art[string]; hidden: boolean; onClick?: () => void }) {
   const costText = COLORS.filter(color => card.cost[color]).map(color => `${card.cost[color]} ${color}`).join(', ') || 'free'
+  const name = art?.name ?? card.name
   return <button type="button" className={`reserve-button${hidden ? ' reserve-face-down' : ''}`} onClick={onClick} disabled={!onClick}
-    aria-label={hidden ? `Face-down tier ${card.tier} reserved card` : `${card.name}, tier ${card.tier}, ${card.points} points, ${card.bonus} bonus, costs ${costText}`}>
+    aria-label={hidden ? `Face-down tier ${card.tier} reserved card` : `${name}, tier ${card.tier}, ${card.points} points, ${card.bonus} bonus, costs ${costText}`}>
     {hidden ? <><span className="reserve-back-symbol" aria-hidden="true">✿</span><span>Tier {card.tier}</span><span>Face down</span></> : <>
       <span className="reserve-card-top"><strong>{card.points} ✦</strong><span>Tier {card.tier}</span><Gem color={card.bonus} small /></span>
-      <span className="reserve-card-name">{card.name}</span>
+      {art && <span className="reserve-card-art"><img src={art.image} alt="" loading="lazy" /></span>}
+      <span className="reserve-card-name">{name}</span>
       <span className="reserve-card-costs" aria-label={`Cost: ${costText}`}>
         {COLORS.filter(color => card.cost[color]).map(color => <span className="reserve-card-cost" key={color}><Gem color={color} small /><b>{card.cost[color]}</b></span>)}
       </span>
@@ -109,13 +115,13 @@ function ReservedCard({ card, hidden, onClick }: { card: Card; hidden: boolean; 
   </button>
 }
 
-function PlayerArea({ player, onReserve, selectedReserve, reservedActions }: { player: Player; onReserve?: (slot: number) => void; selectedReserve?: number | null; reservedActions?: ReservedActions }) {
+function PlayerArea({ player, tier3Art, onReserve, selectedReserve, reservedActions }: { player: Player; tier3Art: Tier3Art; onReserve?: (slot: number) => void; selectedReserve?: number | null; reservedActions?: ReservedActions }) {
   return <section className={`player-area player-${player.tone}`} aria-label={`${player.name}'s area`}>
     <div className="player-summary">
       <div className="player-identity"><div className="player-avatar" aria-hidden="true"><Gem color={player.tone === 'rose' ? 'red' : 'blue'} /></div><div><h2>{player.name}</h2><span>{player.points} points</span></div></div>
       <div className="player-gems" aria-label="Gem holdings">{([...COLORS, 'gold'] as GemColor[]).map((color) => <div className="player-gem" key={color} aria-label={`${player.gems[color]} ${GEM_NAMES[color]}`}><Gem color={color} small /><span aria-hidden="true">{player.gems[color]}</span></div>)}</div>
       <div className="player-holdings">
-        <div className="reserve-area"><h3>Reserved <span>{player.reserves.filter(Boolean).length} / 3</span></h3><div className="reserve-slots">{player.reserves.map((card, index) => <div className={`reserve-slot${selectedReserve === index ? ' reserve-slot-selected' : ''}`} key={index} aria-label={card ? undefined : `Empty reserve slot ${index + 1} of 3`}>{card ? <ReservedCard card={card} hidden={player.id==='p2' && player.reserveHidden[index]} onClick={onReserve ? () => onReserve(index) : undefined} /> : <span aria-hidden="true">✧</span>}{card && selectedReserve === index && reservedActions && <div className="reserve-card-actions" role="group" aria-label={`Actions for reserved ${card.name}`}><button type="button" className="card-overlay-close" onClick={reservedActions.close} aria-label="Close reserved card actions">✕</button>{reservedActions.buy ? <button type="button" onClick={reservedActions.buy}>Buy</button> : <span>Need gems</span>}</div>}</div>)}</div></div>
+        <div className="reserve-area"><h3>Reserved <span>{player.reserves.filter(Boolean).length} / 3</span></h3><div className="reserve-slots">{player.reserves.map((card, index) => <div className={`reserve-slot${selectedReserve === index ? ' reserve-slot-selected' : ''}`} key={index} aria-label={card ? undefined : `Empty reserve slot ${index + 1} of 3`}>{card ? <ReservedCard card={card} art={tier3Art[card.id]} hidden={player.id==='p2' && player.reserveHidden[index]} onClick={onReserve ? () => onReserve(index) : undefined} /> : <span aria-hidden="true">✧</span>}{card && selectedReserve === index && reservedActions && <div className="reserve-card-actions" role="group" aria-label={`Actions for reserved ${tier3Art[card.id]?.name ?? card.name}`}><button type="button" className="card-overlay-close" onClick={reservedActions.close} aria-label="Close reserved card actions">✕</button>{reservedActions.buy ? <button type="button" onClick={reservedActions.buy}>Buy</button> : <span>Need gems</span>}</div>}</div>)}</div></div>
         <div className="player-nobles-area" aria-label={`${player.name}'s claimed nobles`}>
           <h3>Nobles <span>{player.nobles.length} / 3</span></h3>
           <div className="player-noble-slots">{Array.from({ length: 3 }, (_, index) => {
@@ -133,7 +139,7 @@ function PlayerArea({ player, onReserve, selectedReserve, reservedActions }: { p
         </div>
         <div className="purchased-area"><h3>Purchased cards <span>· permanent bonuses</span></h3><div className="purchased-columns">{COLORS.map((color) => <div className={`purchased-column column-${color}`} key={color} aria-label={`${color} bonus cards, ${player.purchased[color].length}`}>
       <div className="column-heading"><Gem color={color} small /><span>{color}</span><b>{player.purchased[color].length}</b></div>
-      <div className="purchased-stack">{player.purchased[color].length ? player.purchased[color].map((card) => <div className={`purchased-mini scene-${card.motif}`} key={card.id} title={card.name}><CardMotif motif={card.motif} /><span className="mini-point">{card.points}</span></div>) : <div className="stack-empty" aria-hidden="true">✧</div>}</div>
+      <div className="purchased-stack">{player.purchased[color].length ? player.purchased[color].map((card) => <div className={`purchased-mini scene-${card.motif}`} key={card.id} title={tier3Art[card.id]?.name ?? card.name}>{tier3Art[card.id] ? <img className="purchased-mini-art" src={tier3Art[card.id].image} alt="" loading="lazy" /> : <CardMotif motif={card.motif} />}<span className="mini-point">{card.points}</span></div>) : <div className="stack-empty" aria-hidden="true">✧</div>}</div>
         </div>)}</div></div>
       </div>
     </div>
@@ -154,16 +160,32 @@ function TierDeck({ tier, count, selected, reservable, onClick, actions }: { tie
 export default function BoardPreview({ board, onCard, onNoble, onReserve, onDeck, selected, selectedDeck, selectedReserve, selectedGems = [], selectedDiscards = [], onGem, onGold, onDiscardGem, onConfirmDiscards, onClearDiscards, reserveMode = false, onConfirmGems, onClearGems, canConfirmGems = false, marketActions, reservedActions, deckActions }: { board: Game; onCard?: (tier: 1 | 2 | 3, slot: number) => void; onNoble?: (slot: number) => void; onReserve?: (slot: number) => void; onDeck?: (tier: 1 | 2 | 3) => void; selected?: string; selectedDeck?: 1 | 2 | 3 | null; selectedReserve?: number | null; selectedGems?: Color[]; selectedDiscards?: GemColor[]; onGem?: (color: Color) => void; onGold?: () => void; onDiscardGem?: (color: GemColor) => void; onConfirmDiscards?: () => void; onClearDiscards?: () => void; reserveMode?: boolean; onConfirmGems?: () => void; onClearGems?: () => void; canConfirmGems?: boolean; marketActions?: MarketActions; reservedActions?: ReservedActions; deckActions?: DeckActions }) {
   const tiers = [3, 2, 1] as const
   const reserveFull = board.players[0].reserves.every(card => card !== null)
+  const [tier3Art, setTier3Art] = useState<Tier3Art>({})
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const base = '/design/card-concepts/tier_3/national-landmarks/'
+    fetch(`${base}manifest.json`, { signal: controller.signal })
+      .then(response => { if (!response.ok) throw new Error('Could not load Tier 3 art'); return response.json() })
+      .then((entries: { id: number; name: string; file: string }[]) => {
+        setTier3Art(Object.fromEntries(entries.map(entry => [String(entry.id), {
+          name: entry.name,
+          image: `${base}${entry.file}`,
+        }])))
+      })
+      .catch(() => { /* Keep the card motifs if art is unavailable. */ })
+    return () => controller.abort()
+  }, [])
   return <div className="game-board">
-    <div className="opponent-layout"><PlayerArea player={board.players[1]} /></div>
+    <div className="opponent-layout"><PlayerArea player={board.players[1]} tier3Art={tier3Art} /></div>
     <section className="noble-section" aria-labelledby="noble-title"><h2 id="noble-title">Visitors <span aria-hidden="true">✦</span></h2><div className="noble-list">{board.nobles.map((noble, slot) => noble ? <NobleTile noble={noble} key={slot} onClick={onNoble ? () => onNoble(slot) : undefined} /> : <div className="noble-tile empty-tile" key={slot}>Visited</div>)}</div></section>
     <div className="market-layout">
       <GemBank bank={board.bank} held={board.players[0].gems} selected={selectedGems} selectedDiscards={selectedDiscards} onGem={onGem} onGold={onGold} onDiscardGem={onDiscardGem} onConfirmDiscards={onConfirmDiscards} onClearDiscards={onClearDiscards} reserveMode={reserveMode} reserveFull={reserveFull} onConfirm={onConfirmGems} onClear={onClearGems} canConfirm={canConfirmGems} />
       <section className="market-panel" aria-label="Development card market">{tiers.map((tier) => <div className="market-row" key={tier}>
         <TierDeck tier={tier} count={board.decks[tier].length} selected={selectedDeck === tier} reservable={reserveMode && !reserveFull && board.decks[tier].length > 0} onClick={onDeck && !reserveFull ? () => onDeck(tier) : undefined} actions={selectedDeck === tier ? deckActions : undefined} />
-        <div className="market-cards">{board.market[tier].map((card, slot) => card ? <MarketCard card={card} key={slot} selected={selected===`${tier}-${slot}`} actions={selected===`${tier}-${slot}` ? marketActions : undefined} reservable={reserveMode && !reserveFull} onClick={onCard ? () => onCard(tier, slot) : undefined} /> : <div className="market-card empty-tile" key={slot}>Empty</div>)}</div>
+        <div className="market-cards">{board.market[tier].map((card, slot) => card ? <MarketCard card={card} art={tier3Art[card.id]} key={slot} selected={selected===`${tier}-${slot}`} actions={selected===`${tier}-${slot}` ? marketActions : undefined} reservable={reserveMode && !reserveFull} onClick={onCard ? () => onCard(tier, slot) : undefined} /> : <div className="market-card empty-tile" key={slot}>Empty</div>)}</div>
       </div>)}</section>
     </div>
-    <div className="players-layout"><PlayerArea player={board.players[0]} onReserve={onReserve} selectedReserve={selectedReserve} reservedActions={reservedActions} /></div>
+    <div className="players-layout"><PlayerArea player={board.players[0]} tier3Art={tier3Art} onReserve={onReserve} selectedReserve={selectedReserve} reservedActions={reservedActions} /></div>
   </div>
 }

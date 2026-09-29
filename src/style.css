@@ -314,6 +314,12 @@ main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{
 .player-noble-name{font-size:.78rem}
 .payment-requirement small,.payment-remaining{font-size:.75rem}
 
+/* Tier 3 national landmarks use the artwork listed in their manifest. */
+.card-art-image{display:block;width:100%;height:100%;object-fit:cover;object-position:center 42%}
+.reserve-card-art{display:block;flex:1;min-height:25px;width:100%;overflow:hidden;border-radius:4px}
+.reserve-card-art img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 42%}
+.purchased-mini-art{display:block;width:100%;height:100%;object-fit:cover;object-position:center 42%;border-radius:4px}
+
 /* Slow movement in the garden stays behind every game control. */
 .world-sunbeam{position:absolute;top:-20%;right:1%;width:38%;height:130%;transform:rotate(19deg);transform-origin:top center;background:linear-gradient(90deg,transparent,#fff5c520,transparent 65%);opacity:.3;animation:sunbeam-shift 26s ease-in-out infinite alternate}
 .world-petal-four{top:19%;left:22%;animation:petal-wander 23s ease-in-out -6s infinite alternate}
