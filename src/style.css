@@ -1,4 +1,4 @@
-:root{font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:#3d342c;background:#e8ede2;font-synthesis:none}
+:root{font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;font-size:17.5px;color:#3d342c;background:#e8ede2;font-synthesis:none}
 *{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}h1,h2,h3,p{margin-top:0}
 .app-shell{min-height:100vh}.site-header{display:flex;align-items:center;justify-content:space-between;padding:15px clamp(16px,4vw,58px);background:#718168;color:#fffaf0}.brand{font-weight:800;font-size:1.35rem;letter-spacing:.02em}.brand-gem{color:#f8d477;margin-right:7px}.nav-current{padding:8px 17px;border-radius:999px;background:#faf5e9;color:#394d39;font-weight:700}
 main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:24px}.intro-copy{max-width:690px}.eyebrow{text-transform:uppercase;letter-spacing:.15em;font-size:.72rem;font-weight:800;color:#60745c;margin-bottom:9px}h1{font-size:clamp(2rem,4vw,3.25rem);line-height:1.06;margin-bottom:10px}.lead{color:#5b6859;line-height:1.55;margin-bottom:0}.seed-panel{background:#fffaf0;border:1px solid #d5d9c9;border-radius:18px;box-shadow:0 8px 20px #364c3016;padding:16px;min-width:min(100%,360px)}.seed-panel h2{font-size:1.07rem;margin-bottom:4px}.seed-panel p{font-size:.81rem;color:#697567;line-height:1.35;margin-bottom:12px}.seed-panel label{display:block;font-size:.8rem;font-weight:800;margin-bottom:5px}.seed-row{display:flex;gap:7px}.seed-row input{min-width:0;flex:1;padding:9px 10px;border:1px solid #bdc7b4;border-radius:9px;background:#fff}.seed-row button,.seed-random{border:0;border-radius:9px;font-weight:800}.seed-row button{padding:9px 14px;background:#6d8169;color:white}.seed-random{margin-top:10px;background:none;color:#526c52;padding:3px 1px;font-size:.82rem}.seed-row button:hover{background:#506c51}.seed-random:hover{text-decoration:underline}
@@ -22,6 +22,13 @@ main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{
 .gem-selection-count{position:absolute;top:3px;right:2px;border-radius:999px;background:#3e6b45;color:white;font-size:.68rem;font-weight:800;min-width:22px;line-height:21px}
 .bank-gold{padding:7px 2px;opacity:.85}.bank-order{margin-top:12px;padding-top:10px;border-top:1px solid #d8d0bb}.bank-order p{font-size:.75rem;line-height:1.35;color:#5d664f;min-height:2.1em;margin:0 0 9px}.bank-order-buttons{display:flex;gap:6px}.bank-order button{border:0;border-radius:9px;padding:7px 9px;font-size:.75rem;font-weight:800}.confirm-gems{flex:1;background:#527753;color:#fffdf3}.confirm-gems:disabled{background:#d5d9c9;color:#7c8575;cursor:not-allowed}.clear-gems{background:#e8e2d5;color:#655d4c}.clear-gems:disabled{opacity:.5;cursor:not-allowed}
 .bank-gold:not(:disabled){opacity:1}.bank-gold.bank-gem-selected{border-color:#dfb659;background:#fbf1ce;box-shadow:0 0 0 3px #ffe8a366}
+.bank-gem-discard{border-color:#d1a85d;background:#fff1cc;box-shadow:0 0 0 3px #ffe8a3a8,0 0 17px 5px #f5d881a3;animation:discard-glow 1.8s ease-in-out infinite alternate}
+.bank-gem-discard:hover:not(:disabled){background:#ffe9b3}
+.bank-gem-discard .gem-label{color:#674b25;font-weight:900}
+.bank-gem-discard-selected{animation:none;border-color:#638a57;background:#dfefdc;box-shadow:0 0 0 3px #accd9b,0 0 14px 5px #a4ca92}
+.bank-gem-discard-selected:hover:not(:disabled){background:#d5eacb}
+@keyframes discard-glow{to{box-shadow:0 0 0 4px #ffe8a3de,0 0 24px 9px #f5d881c9}}
+@media(prefers-reduced-motion:reduce){.bank-gem-discard{animation:none}}
 .reservable-card{position:relative;outline:3px solid #ffe18a;outline-offset:1px;box-shadow:0 0 16px 5px #ffe69a99,0 4px 0 #41523d70;overflow:hidden}
 .reservable-card::after{content:"";position:absolute;z-index:3;inset:-70% auto -70% -95%;width:42%;transform:rotate(23deg);background:linear-gradient(90deg,transparent,#fffbe693,transparent);pointer-events:none;animation:reserve-shine 2.3s ease-in-out infinite}
 @keyframes reserve-shine{0%,15%{left:-95%}65%,100%{left:155%}}
@@ -198,7 +205,7 @@ main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{
 .player-summary{grid-template-columns:minmax(110px,125px) minmax(150px,175px) minmax(0,1fr);align-items:start}
 .player-holdings{min-width:0;display:grid;grid-template-columns:minmax(210px,0.9fr) minmax(0,1.6fr);align-items:start;gap:10px}
 .player-holdings .reserve-area{min-width:0;border-left:1px solid #c7b8a7;padding:0 0 0 10px}
-.player-holdings .purchased-area{min-width:0;margin:0;padding:7px;box-shadow:none}
+.player-holdings .purchased-area{grid-column:1 / -1;min-width:0;margin:0;padding:7px;box-shadow:none}
 .player-holdings .purchased-columns{grid-template-columns:repeat(5,minmax(0,1fr))}
 .player-holdings .column-heading span{display:none}
 @media(max-width:1100px){
@@ -238,10 +245,10 @@ main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{
 .player-gem .gem{width:27px;height:27px;border-width:2px}
 .player-gem>span:last-child{font-size:1.35rem;line-height:1;font-weight:900}
 
-/* Tablet player panels give the five purchased columns the full width. */
+/* Keep claimed nobles beside reserves on tablets; purchased cards span below. */
 @media(min-width:601px) and (max-width:1100px){
-  .player-holdings{grid-template-columns:minmax(0,1fr)}
-  .player-holdings .reserve-area{max-width:500px}
+  .player-holdings{grid-template-columns:minmax(180px,.9fr) minmax(0,1.6fr)}
+  .player-holdings .reserve-area{border-top:0;border-left:1px solid #c7b8a7;padding:0 0 0 10px}
   .player-holdings .purchased-area,.player-holdings .purchased-columns{width:100%}
 }
 
@@ -285,7 +292,7 @@ main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{
 }
 
 /* Claimed nobles have their own section beside the other player holdings. */
-.player-nobles-area{grid-column:1 / -1;min-width:0;padding:7px;border:2px solid #d5bcb4;border-radius:16px;background:#fae9e3}
+.player-nobles-area{min-width:0;padding:7px;border:2px solid #d5bcb4;border-radius:16px;background:#fae9e3}
 .player-sky .player-nobles-area{background:#e5edf4;border-color:#b3c9d9}
 .player-nobles-area h3{margin:0 0 6px;color:#66513d;font-size:.85rem}
 .player-nobles-area h3 span{font-size:.75rem;font-weight:500}
@@ -298,6 +305,14 @@ main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{
 .player-noble-slot .cost-list{flex:none;flex-wrap:wrap;gap:2px 4px;width:100%;min-height:29px;margin-top:auto;padding:3px 2px;background:#fff9eddc}
 .player-noble-slot .cost-item strong{font-size:.82rem;font-weight:900}
 .player-noble-slot .cost-item .gem{width:17px;height:17px}
+
+/* Raise small labels alongside the overall type scale. */
+.gem-label{font-size:.72rem}
+.card-name{font-size:.75rem}
+.column-heading{font-size:.73rem}
+.noble-name{font-size:.82rem}
+.player-noble-name{font-size:.78rem}
+.payment-requirement small,.payment-remaining{font-size:.75rem}
 
 /* Slow movement in the garden stays behind every game control. */
 .world-sunbeam{position:absolute;top:-20%;right:1%;width:38%;height:130%;transform:rotate(19deg);transform-origin:top center;background:linear-gradient(90deg,transparent,#fff5c520,transparent 65%);opacity:.3;animation:sunbeam-shift 26s ease-in-out infinite alternate}

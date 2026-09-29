@@ -63,25 +63,31 @@ function NobleTile({ noble, onClick }: { noble: Noble; onClick?: () => void }) {
   </button>
 }
 
-function GemBank({ bank, selected, onGem, onGold, reserveMode, reserveFull, onConfirm, onClear, canConfirm }: { bank: Game['bank']; selected: Color[]; onGem?: (color: Color) => void; onGold?: () => void; reserveMode: boolean; reserveFull: boolean; onConfirm?: () => void; onClear?: () => void; canConfirm: boolean }) {
+function GemBank({ bank, held, selected, selectedDiscards, onGem, onGold, onDiscardGem, onConfirmDiscards, onClearDiscards, reserveMode, reserveFull, onConfirm, onClear, canConfirm }: { bank: Game['bank']; held: Player['gems']; selected: Color[]; selectedDiscards: GemColor[]; onGem?: (color: Color) => void; onGold?: () => void; onDiscardGem?: (color: GemColor) => void; onConfirmDiscards?: () => void; onClearDiscards?: () => void; reserveMode: boolean; reserveFull: boolean; onConfirm?: () => void; onClear?: () => void; canConfirm: boolean }) {
   const colors: GemColor[] = [...COLORS, 'gold']
+  const discardCount = Object.values(held).reduce((sum, count) => sum + count, 0) - 10
   return <section className="bank-panel" aria-labelledby="bank-title">
     <h2 id="bank-title">Gem bank <span aria-hidden="true">✿</span></h2>
     <div className="bank-grid">{colors.map(color => color === 'gold'
-      ? <button type="button" className={`bank-gem bank-gem-button bank-gold${reserveMode ? ' bank-gem-selected' : ''}`} key={color}
-          onClick={onGold} disabled={!onGold} aria-pressed={reserveMode}
-          aria-label={`Reserve a card; ${bank.gold} gold available; ${reserveFull ? 'reserve pile full' : bank.gold ? 'gain one gold when reserving' : 'reserve without gaining gold'}`}>
+      ? <button type="button" className={`bank-gem bank-gem-button bank-gold${reserveMode ? ' bank-gem-selected' : ''}${onDiscardGem && held.gold > 0 ? ' bank-gem-discard' : ''}${selectedDiscards.includes('gold') ? ' bank-gem-discard-selected' : ''}`} key={color}
+          onClick={onDiscardGem ? () => onDiscardGem('gold') : onGold} disabled={onDiscardGem ? held.gold === 0 : !onGold} aria-pressed={onDiscardGem ? selectedDiscards.includes('gold') : reserveMode}
+          aria-label={onDiscardGem ? `Select gold to return; you hold ${held.gold}, ${selectedDiscards.filter(c => c === 'gold').length} selected` : `Reserve a card; ${bank.gold} gold available; ${reserveFull ? 'reserve pile full' : bank.gold ? 'gain one gold when reserving' : 'reserve without gaining gold'}`}>
           <Gem color={color} /><span className="bank-count" aria-hidden="true">{bank[color]}</span>
-          <span className="gem-label">{reserveFull ? 'Reserve full' : 'Reserve mode'}</span>
+          <span className="gem-label">{onDiscardGem ? `${held.gold} held` : reserveFull ? 'Reserve full' : 'Reserve mode'}</span>
+          {onDiscardGem && selectedDiscards.includes('gold') && <span className="gem-selection-count" aria-hidden="true">×{selectedDiscards.filter(c => c === 'gold').length}</span>}
         </button>
-      : <button type="button" className={`bank-gem bank-gem-button${selected.includes(color) ? ' bank-gem-selected' : ''}`} key={color}
-          onClick={() => onGem?.(color)} disabled={!onGem || bank[color] === 0}
-          aria-pressed={selected.includes(color)} aria-label={`${GEM_NAMES[color]}, ${bank[color]} available, ${selected.filter(c => c === color).length} selected`}>
+      : <button type="button" className={`bank-gem bank-gem-button${selected.includes(color) ? ' bank-gem-selected' : ''}${onDiscardGem && held[color] > 0 ? ' bank-gem-discard' : ''}${selectedDiscards.includes(color) ? ' bank-gem-discard-selected' : ''}`} key={color}
+          onClick={() => onDiscardGem ? onDiscardGem(color) : onGem?.(color)} disabled={onDiscardGem ? held[color] === 0 : !onGem || bank[color] === 0}
+          aria-pressed={onDiscardGem ? selectedDiscards.includes(color) : selected.includes(color)} aria-label={onDiscardGem ? `Select ${GEM_NAMES[color]} to return; you hold ${held[color]}, ${selectedDiscards.filter(c => c === color).length} selected` : `${GEM_NAMES[color]}, ${bank[color]} available, ${selected.filter(c => c === color).length} selected`}>
           <Gem color={color} /><span className="bank-count" aria-hidden="true">{bank[color]}</span>
-          <span className="gem-label">{GEM_NAMES[color]}</span>
-          {selected.filter(c => c === color).length > 0 && <span className="gem-selection-count" aria-hidden="true">×{selected.filter(c => c === color).length}</span>}
+          <span className="gem-label">{onDiscardGem ? `${held[color]} held` : GEM_NAMES[color]}</span>
+          {(onDiscardGem ? selectedDiscards.filter(c => c === color).length : selected.filter(c => c === color).length) > 0 && <span className="gem-selection-count" aria-hidden="true">×{onDiscardGem ? selectedDiscards.filter(c => c === color).length : selected.filter(c => c === color).length}</span>}
         </button>
     )}</div>
+    {onDiscardGem && <div className="bank-order" aria-live="polite">
+      <p>{selectedDiscards.length} / {discardCount} selected to return. Gems stay in your hand until you confirm.</p>
+      <div className="bank-order-buttons"><button type="button" className="confirm-gems" disabled={selectedDiscards.length !== discardCount} onClick={onConfirmDiscards}>Confirm return</button><button type="button" className="clear-gems" disabled={!selectedDiscards.length} onClick={onClearDiscards}>Clear</button></div>
+    </div>}
     {onGem && <div className="bank-order" aria-live="polite">
       <p>{reserveMode ? `Choose a glowing card or deck to reserve.${bank.gold ? ' Gain one gold.' : ' No gold remains, but you can still reserve.'} Click gold again to cancel.` : selected.length ? `Selected: ${selected.map(color => GEM_NAMES[color]).join(' + ')}` : 'Choose three different gems, or two of one color when four remain.'}</p>
       <div className="bank-order-buttons"><button type="button" className="confirm-gems" disabled={!canConfirm} onClick={onConfirm}>Confirm gems</button><button type="button" className="clear-gems" disabled={!selected.length} onClick={onClear}>Clear</button></div>
@@ -110,10 +116,6 @@ function PlayerArea({ player, onReserve, selectedReserve, reservedActions }: { p
       <div className="player-gems" aria-label="Gem holdings">{([...COLORS, 'gold'] as GemColor[]).map((color) => <div className="player-gem" key={color} aria-label={`${player.gems[color]} ${GEM_NAMES[color]}`}><Gem color={color} small /><span aria-hidden="true">{player.gems[color]}</span></div>)}</div>
       <div className="player-holdings">
         <div className="reserve-area"><h3>Reserved <span>{player.reserves.filter(Boolean).length} / 3</span></h3><div className="reserve-slots">{player.reserves.map((card, index) => <div className={`reserve-slot${selectedReserve === index ? ' reserve-slot-selected' : ''}`} key={index} aria-label={card ? undefined : `Empty reserve slot ${index + 1} of 3`}>{card ? <ReservedCard card={card} hidden={player.id==='p2' && player.reserveHidden[index]} onClick={onReserve ? () => onReserve(index) : undefined} /> : <span aria-hidden="true">✧</span>}{card && selectedReserve === index && reservedActions && <div className="reserve-card-actions" role="group" aria-label={`Actions for reserved ${card.name}`}><button type="button" className="card-overlay-close" onClick={reservedActions.close} aria-label="Close reserved card actions">✕</button>{reservedActions.buy ? <button type="button" onClick={reservedActions.buy}>Buy</button> : <span>Need gems</span>}</div>}</div>)}</div></div>
-        <div className="purchased-area"><h3>Purchased cards <span>· permanent bonuses</span></h3><div className="purchased-columns">{COLORS.map((color) => <div className={`purchased-column column-${color}`} key={color} aria-label={`${color} bonus cards, ${player.purchased[color].length}`}>
-      <div className="column-heading"><Gem color={color} small /><span>{color}</span><b>{player.purchased[color].length}</b></div>
-      <div className="purchased-stack">{player.purchased[color].length ? player.purchased[color].map((card) => <div className={`purchased-mini scene-${card.motif}`} key={card.id} title={card.name}><CardMotif motif={card.motif} /><span className="mini-point">{card.points}</span></div>) : <div className="stack-empty" aria-hidden="true">✧</div>}</div>
-        </div>)}</div></div>
         <div className="player-nobles-area" aria-label={`${player.name}'s claimed nobles`}>
           <h3>Nobles <span>{player.nobles.length} / 3</span></h3>
           <div className="player-noble-slots">{Array.from({ length: 3 }, (_, index) => {
@@ -129,6 +131,10 @@ function PlayerArea({ player, onReserve, selectedReserve, reservedActions }: { p
           </div>
           })}</div>
         </div>
+        <div className="purchased-area"><h3>Purchased cards <span>· permanent bonuses</span></h3><div className="purchased-columns">{COLORS.map((color) => <div className={`purchased-column column-${color}`} key={color} aria-label={`${color} bonus cards, ${player.purchased[color].length}`}>
+      <div className="column-heading"><Gem color={color} small /><span>{color}</span><b>{player.purchased[color].length}</b></div>
+      <div className="purchased-stack">{player.purchased[color].length ? player.purchased[color].map((card) => <div className={`purchased-mini scene-${card.motif}`} key={card.id} title={card.name}><CardMotif motif={card.motif} /><span className="mini-point">{card.points}</span></div>) : <div className="stack-empty" aria-hidden="true">✧</div>}</div>
+        </div>)}</div></div>
       </div>
     </div>
   </section>
@@ -145,14 +151,14 @@ function TierDeck({ tier, count, selected, reservable, onClick, actions }: { tie
   </div>
 }
 
-export default function BoardPreview({ board, onCard, onNoble, onReserve, onDeck, selected, selectedDeck, selectedReserve, selectedGems = [], onGem, onGold, reserveMode = false, onConfirmGems, onClearGems, canConfirmGems = false, marketActions, reservedActions, deckActions }: { board: Game; onCard?: (tier: 1 | 2 | 3, slot: number) => void; onNoble?: (slot: number) => void; onReserve?: (slot: number) => void; onDeck?: (tier: 1 | 2 | 3) => void; selected?: string; selectedDeck?: 1 | 2 | 3 | null; selectedReserve?: number | null; selectedGems?: Color[]; onGem?: (color: Color) => void; onGold?: () => void; reserveMode?: boolean; onConfirmGems?: () => void; onClearGems?: () => void; canConfirmGems?: boolean; marketActions?: MarketActions; reservedActions?: ReservedActions; deckActions?: DeckActions }) {
+export default function BoardPreview({ board, onCard, onNoble, onReserve, onDeck, selected, selectedDeck, selectedReserve, selectedGems = [], selectedDiscards = [], onGem, onGold, onDiscardGem, onConfirmDiscards, onClearDiscards, reserveMode = false, onConfirmGems, onClearGems, canConfirmGems = false, marketActions, reservedActions, deckActions }: { board: Game; onCard?: (tier: 1 | 2 | 3, slot: number) => void; onNoble?: (slot: number) => void; onReserve?: (slot: number) => void; onDeck?: (tier: 1 | 2 | 3) => void; selected?: string; selectedDeck?: 1 | 2 | 3 | null; selectedReserve?: number | null; selectedGems?: Color[]; selectedDiscards?: GemColor[]; onGem?: (color: Color) => void; onGold?: () => void; onDiscardGem?: (color: GemColor) => void; onConfirmDiscards?: () => void; onClearDiscards?: () => void; reserveMode?: boolean; onConfirmGems?: () => void; onClearGems?: () => void; canConfirmGems?: boolean; marketActions?: MarketActions; reservedActions?: ReservedActions; deckActions?: DeckActions }) {
   const tiers = [3, 2, 1] as const
   const reserveFull = board.players[0].reserves.every(card => card !== null)
   return <div className="game-board">
     <div className="opponent-layout"><PlayerArea player={board.players[1]} /></div>
     <section className="noble-section" aria-labelledby="noble-title"><h2 id="noble-title">Visitors <span aria-hidden="true">✦</span></h2><div className="noble-list">{board.nobles.map((noble, slot) => noble ? <NobleTile noble={noble} key={slot} onClick={onNoble ? () => onNoble(slot) : undefined} /> : <div className="noble-tile empty-tile" key={slot}>Visited</div>)}</div></section>
     <div className="market-layout">
-      <GemBank bank={board.bank} selected={selectedGems} onGem={onGem} onGold={onGold} reserveMode={reserveMode} reserveFull={reserveFull} onConfirm={onConfirmGems} onClear={onClearGems} canConfirm={canConfirmGems} />
+      <GemBank bank={board.bank} held={board.players[0].gems} selected={selectedGems} selectedDiscards={selectedDiscards} onGem={onGem} onGold={onGold} onDiscardGem={onDiscardGem} onConfirmDiscards={onConfirmDiscards} onClearDiscards={onClearDiscards} reserveMode={reserveMode} reserveFull={reserveFull} onConfirm={onConfirmGems} onClear={onClearGems} canConfirm={canConfirmGems} />
       <section className="market-panel" aria-label="Development card market">{tiers.map((tier) => <div className="market-row" key={tier}>
         <TierDeck tier={tier} count={board.decks[tier].length} selected={selectedDeck === tier} reservable={reserveMode && !reserveFull && board.decks[tier].length > 0} onClick={onDeck && !reserveFull ? () => onDeck(tier) : undefined} actions={selectedDeck === tier ? deckActions : undefined} />
         <div className="market-cards">{board.market[tier].map((card, slot) => card ? <MarketCard card={card} key={slot} selected={selected===`${tier}-${slot}`} actions={selected===`${tier}-${slot}` ? marketActions : undefined} reservable={reserveMode && !reserveFull} onClick={onCard ? () => onCard(tier, slot) : undefined} /> : <div className="market-card empty-tile" key={slot}>Empty</div>)}</div>

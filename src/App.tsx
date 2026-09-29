@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import BoardPreview from './components/BoardPreview'
 import PaymentEditor from './components/PaymentEditor'
-import { COLORS, applyAction, chooseBlakeAction, createGame, legalActions, type Action, type Color, type Game, type GoldPayment, type Tier } from './game/game'
+import { COLORS, applyAction, chooseBlakeAction, createGame, legalActions, type Action, type Color, type Game, type GemColor, type GoldPayment, type Tier } from './game/game'
 import { matchingTake, selectBankGem } from './game/gemSelection'
 
 function makeSeed(): string {
@@ -35,6 +35,7 @@ export default function App() {
   const [selectedDeck, setSelectedDeck] = useState<Tier | null>(null)
   const [selectedReserve, setSelectedReserve] = useState<number | null>(null)
   const [selectedGems, setSelectedGems] = useState<Color[]>([])
+  const [selectedDiscards, setSelectedDiscards] = useState<GemColor[]>([])
   const [reserveMode, setReserveMode] = useState(false)
   const [paymentTarget, setPaymentTarget] = useState<'market' | 'reserve' | null>(null)
   const [message, setMessage] = useState('Your turn. Choose gems or a card.')
@@ -104,6 +105,7 @@ export default function App() {
       setSelectedDeck(null)
       setSelectedReserve(null)
       setSelectedGems([])
+      setSelectedDiscards([])
       setReserveMode(false)
       setPaymentTarget(null)
       setMessage('Move played.')
@@ -119,6 +121,7 @@ export default function App() {
     setSelectedDeck(null)
     setSelectedReserve(null)
     setSelectedGems([])
+    setSelectedDiscards([])
     setReserveMode(false)
     setPaymentTarget(null)
     setMessage('New game. Your turn.')
@@ -135,13 +138,14 @@ export default function App() {
   const canBuyReserved = reserveActions.some(a => a.type === 'buyReserve')
   const reserveCardAction = cardActions.find((a): a is Extract<Action, { type: 'reserve' }> => a.type === 'reserve')
   const reserveDeckAction = selectedDeck !== null ? legal.find((a): a is Extract<Action, { type: 'reserveDeck' }> => a.type === 'reserveDeck' && a.tier === selectedDeck) : undefined
-  const forced = legal.filter(a => a.type === 'discard' || a.type === 'noble')
+  const forced = legal.filter(a => a.type === 'noble')
   const takes = legal.filter((a): a is Extract<Action, { type: 'take' }> => a.type === 'take')
   const selectedTake = matchingTake(takes, selectedGems)
   const canReserve = legal.some(a => a.type === 'reserve' || a.type === 'reserveDeck')
   const paymentCard = paymentTarget === 'market' ? chosen : paymentTarget === 'reserve' ? chosenReserved : null
   const paymentActions = paymentTarget === 'market' ? cardActions : paymentTarget === 'reserve' ? reserveActions : []
   const winner = game.phase === 'over' ? (game.winners.length === 2 ? 'A tie' : game.winners[0] === 0 ? 'You win!' : 'Blake wins!') : null
+  const gemsToReturn = Object.values(game.players[0].gems).reduce((sum, count) => sum + count, 0) - 10
 
   function confirmPayment(goldPayment: GoldPayment) {
     const action = paymentActions.find(a => (a.type === 'buy' || a.type === 'buyReserve') && COLORS.every(color => a.goldPayment[color] === goldPayment[color]))
@@ -155,6 +159,30 @@ export default function App() {
     setSelected(null)
     setSelectedDeck(null)
     setSelectedReserve(null)
+  }
+  function discardGem(color: GemColor) {
+    if (game.currentPlayer !== 0 || game.phase !== 'discard') return
+    setSelectedDiscards(current => {
+      const selectedCount = current.filter(candidate => candidate === color).length
+      if (current.length >= gemsToReturn || selectedCount >= game.players[0].gems[color]) {
+        if (!selectedCount) return current
+        const lastIndex = current.lastIndexOf(color)
+        return current.filter((_, index) => index !== lastIndex)
+      }
+      return [...current, color]
+    })
+  }
+  function confirmDiscards() {
+    if (game.currentPlayer !== 0 || game.phase !== 'discard' || selectedDiscards.length !== gemsToReturn) return
+    try {
+      let next = game
+      for (const color of selectedDiscards) next = applyAction(next, { type: 'discard', color })
+      setGame(next)
+      setSelectedDiscards([])
+      setMessage('Gems returned.')
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Invalid return')
+    }
   }
   function selectCard(tier: Tier, slot: number) {
     if (reserveMode) {
@@ -254,8 +282,8 @@ export default function App() {
         <form className="seed-panel" onSubmit={e => { e.preventDefault(); reset(seedDraft) }}><h2>New seeded game</h2><p>Use the same seed to replay the same deck and visitor setup. Starting over resets all moves.</p><label htmlFor="game-seed">Game seed</label><div className="seed-row"><input id="game-seed" value={seedDraft} onChange={e => setSeedDraft(e.target.value)} spellCheck={false} /><button type="submit">Start over</button></div><button type="button" className="seed-random" onClick={() => reset(makeSeed())}>✦ Generate a new game</button></form>
       </div>
       <section className="play-controls" aria-label="Game controls">
-        <div className="play-status"><strong>{winner || (game.currentPlayer === 0 ? 'Your turn' : 'Blake is thinking…')}</strong><span>Turn {game.turn + 1} · You {game.players[0].points} — {game.players[1].points} Blake</span><span>{game.endTriggered && game.phase !== 'over' ? 'Final round in progress. ' : ''}{message}</span></div>
-        {game.currentPlayer === 0 && forced.length > 0 && <div className="forced-controls"><h2>{game.phase === 'discard' ? 'Return gems until you hold ten' : 'Choose one visitor'}</h2><div className="action-list">{forced.map((a, i) => <button key={i} onClick={() => move(a)}>{actionLabel(a)}</button>)}</div></div>}
+        <div className="play-status"><strong>{winner || (game.currentPlayer === 0 ? 'Your turn' : 'Blake is thinking…')}</strong><span>Turn {game.turn + 1} · You {game.players[0].points} — {game.players[1].points} Blake</span><span>{game.endTriggered && game.phase !== 'over' ? 'Final round in progress. ' : ''}{game.currentPlayer === 0 && game.phase === 'discard' ? `Select ${gemsToReturn} ${gemsToReturn === 1 ? 'gem' : 'gems'} to return in the bank, then confirm.` : message}</span></div>
+        {game.currentPlayer === 0 && forced.length > 0 && <div className="forced-controls"><h2>Choose one visitor</h2><div className="action-list">{forced.map((a, i) => <button key={i} onClick={() => move(a)}>{actionLabel(a)}</button>)}</div></div>}
         {winner && <button onClick={() => reset(game.seed)}>Replay this seed</button>}
       </section>
       <BoardPreview board={game} selected={selected ? `${selected.tier}-${selected.slot}` : undefined} selectedDeck={selectedDeck} selectedReserve={selectedReserve} selectedGems={selectedGems} reserveMode={reserveMode}
@@ -263,7 +291,7 @@ export default function App() {
         reservedActions={chosenReserved ? { buy: canBuyReserved ? () => setPaymentTarget('reserve') : undefined, close: () => setSelectedReserve(null) } : undefined}
         deckActions={reserveDeckAction ? { reserve: () => move(reserveDeckAction), close: () => setSelectedDeck(null) } : undefined}
         onGold={game.currentPlayer === 0 && game.phase === 'main' && canReserve ? () => { setReserveMode(active => !active); setSelected(null); setSelectedDeck(null); setSelectedReserve(null); setSelectedGems([]); setPaymentTarget(null) } : undefined}
-        onGem={game.currentPlayer === 0 && game.phase === 'main' ? selectGem : undefined} canConfirmGems={Boolean(selectedTake)} onConfirmGems={() => { if (selectedTake) move(selectedTake) }} onClearGems={() => setSelectedGems([])}
+        onGem={game.currentPlayer === 0 && game.phase === 'main' ? selectGem : undefined} onDiscardGem={game.currentPlayer === 0 && game.phase === 'discard' ? discardGem : undefined} selectedDiscards={selectedDiscards} onConfirmDiscards={confirmDiscards} onClearDiscards={() => setSelectedDiscards([])} canConfirmGems={Boolean(selectedTake)} onConfirmGems={() => { if (selectedTake) move(selectedTake) }} onClearGems={() => setSelectedGems([])}
         onCard={game.currentPlayer === 0 && game.phase === 'main' ? selectCard : undefined} onReserve={game.currentPlayer === 0 && game.phase === 'main' ? slot => { setSelectedReserve(slot); setSelected(null); setSelectedDeck(null); setSelectedGems([]); setReserveMode(false); setPaymentTarget(null) } : undefined}
         onDeck={game.currentPlayer === 0 && game.phase === 'main' ? tier => { setSelectedDeck(tier); setSelected(null); setSelectedReserve(null); setSelectedGems([]); setReserveMode(false); setPaymentTarget(null) } : undefined}
         onNoble={game.currentPlayer === 0 && game.phase === 'noble' ? slot => { const action = legal.find((a): a is Extract<Action, { type: 'noble' }> => a.type === 'noble' && a.slot === slot); if (action) move(action) } : undefined} />
