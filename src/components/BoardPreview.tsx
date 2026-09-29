@@ -114,6 +114,21 @@ function PlayerArea({ player, onReserve, selectedReserve, reservedActions }: { p
       <div className="column-heading"><Gem color={color} small /><span>{color}</span><b>{player.purchased[color].length}</b></div>
       <div className="purchased-stack">{player.purchased[color].length ? player.purchased[color].map((card) => <div className={`purchased-mini scene-${card.motif}`} key={card.id} title={card.name}><CardMotif motif={card.motif} /><span className="mini-point">{card.points}</span></div>) : <div className="stack-empty" aria-hidden="true">✧</div>}</div>
         </div>)}</div></div>
+        <div className="player-nobles-area" aria-label={`${player.name}'s claimed nobles`}>
+          <h3>Nobles <span>{player.nobles.length} / 3</span></h3>
+          <div className="player-noble-slots">{Array.from({ length: 3 }, (_, index) => {
+          const visitor = player.nobles[index]
+          return <div className={`player-noble-slot${visitor ? ' claimed' : ''}`} key={index}
+            aria-label={visitor ? `${visitor.animal_name}, ${visitor.points} points, required ${COLORS.filter(color => visitor.cost[color]).map(color => `${visitor.cost[color]} ${color} bonuses`).join(', ')}` : `Empty noble slot ${index + 1} of 3`}>
+            {visitor ? <>
+              <span className="player-noble-points" aria-hidden="true">{visitor.points}</span>
+              <img src={visitor.portrait} alt="" loading="lazy" />
+              <span className="player-noble-name">{visitor.animal_name}</span>
+              <CostList cost={visitor.cost} forNoble />
+            </> : <span aria-hidden="true">✧</span>}
+          </div>
+          })}</div>
+        </div>
       </div>
     </div>
   </section>
