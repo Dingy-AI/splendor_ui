@@ -945,7 +945,14 @@
         "white": 3,
         "blue": 3,
         "green": 3
-      }
+      },
+      "animal_name": "Clover",
+      "portrait": "/design/visitor-concepts/white-blue-green-rabbit.png",
+      "colors": [
+        "white",
+        "blue",
+        "green"
+      ]
     },
     {
       "id": "1",
@@ -955,7 +962,14 @@
         "white": 3,
         "blue": 3,
         "red": 3
-      }
+      },
+      "animal_name": "Ribbon",
+      "portrait": "/design/visitor-concepts/white-blue-red-fox.png",
+      "colors": [
+        "white",
+        "blue",
+        "red"
+      ]
     },
     {
       "id": "2",
@@ -965,7 +979,14 @@
         "white": 3,
         "red": 3,
         "black": 3
-      }
+      },
+      "animal_name": "Pepper",
+      "portrait": "/design/visitor-concepts/white-red-black-panda.png",
+      "colors": [
+        "white",
+        "red",
+        "black"
+      ]
     },
     {
       "id": "3",
@@ -975,7 +996,14 @@
         "white": 3,
         "blue": 3,
         "black": 3
-      }
+      },
+      "animal_name": "Nimbus",
+      "portrait": "/design/visitor-concepts/white-blue-black-owl.png",
+      "colors": [
+        "white",
+        "blue",
+        "black"
+      ]
     },
     {
       "id": "4",
@@ -985,7 +1013,14 @@
         "green": 3,
         "red": 3,
         "black": 3
-      }
+      },
+      "animal_name": "Bramble",
+      "portrait": "/design/visitor-concepts/green-red-black-beetle.png",
+      "colors": [
+        "green",
+        "red",
+        "black"
+      ]
     },
     {
       "id": "5",
@@ -994,7 +1029,13 @@
       "cost": {
         "red": 4,
         "black": 4
-      }
+      },
+      "animal_name": "Ember",
+      "portrait": "/design/visitor-concepts/red-black-cat.png",
+      "colors": [
+        "red",
+        "black"
+      ]
     },
     {
       "id": "6",
@@ -1003,7 +1044,13 @@
       "cost": {
         "white": 4,
         "black": 4
-      }
+      },
+      "animal_name": "Luna",
+      "portrait": "/design/visitor-concepts/white-black-moth.png",
+      "colors": [
+        "white",
+        "black"
+      ]
     },
     {
       "id": "7",
@@ -1012,7 +1059,13 @@
       "cost": {
         "green": 4,
         "red": 4
-      }
+      },
+      "animal_name": "Berry",
+      "portrait": "/design/visitor-concepts/green-red-fox.png",
+      "colors": [
+        "green",
+        "red"
+      ]
     },
     {
       "id": "8",
@@ -1021,7 +1074,13 @@
       "cost": {
         "white": 4,
         "blue": 4
-      }
+      },
+      "animal_name": "Mallow",
+      "portrait": "/design/visitor-concepts/white-blue-seal.png",
+      "colors": [
+        "white",
+        "blue"
+      ]
     },
     {
       "id": "9",
@@ -1030,7 +1089,13 @@
       "cost": {
         "blue": 4,
         "green": 4
-      }
+      },
+      "animal_name": "Puddle",
+      "portrait": "/design/visitor-concepts/blue-green-frog.png",
+      "colors": [
+        "blue",
+        "green"
+      ]
     }
   ]
 }

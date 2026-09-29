@@ -7,7 +7,7 @@ export type Cost = Partial<Record<Color, number>>
 export type GoldPayment = Record<Color, number>
 export type Motif = 'flower' | 'bridge' | 'lantern' | 'shop' | 'star' | 'leaf'
 export interface Card { id: string; tier: 1 | 2 | 3; points: number; bonus: Color; cost: Cost; name: string; motif: Motif }
-export interface Noble { id: string; name: string; points: number; cost: Cost; tone: 'peach' | 'mint' | 'blue' | 'lilac' | 'butter' }
+export interface Noble { id: string; name: string; animal_name: string; portrait: string; colors: Color[]; points: number; cost: Cost; tone: 'peach' | 'mint' | 'blue' | 'lilac' | 'butter' }
 export interface Player { id: string; name: string; tone: 'rose' | 'sky'; points: number; gems: Record<GemColor, number>; reserves: (Card | null)[]; reserveHidden: boolean[]; purchased: Record<Color, Card[]>; nobles: Noble[] }
 export type Tier = 1 | 2 | 3
 export interface Game { seed: string; bank: Record<GemColor, number>; nobles: (Noble | null)[]; market: Record<Tier, (Card | null)[]>; decks: Record<Tier, Card[]>; players: [Player, Player]; currentPlayer: 0 | 1; phase: 'main' | 'discard' | 'noble' | 'over'; turn: number; endTriggered: boolean; winners: number[]; log: string[] }
@@ -16,7 +16,7 @@ const allGems: GemColor[] = [...COLORS, 'gold']
 const motifs: Motif[] = ['flower', 'bridge', 'lantern', 'shop', 'star', 'leaf']
 const tones: Noble['tone'][] = ['peach', 'mint', 'blue', 'lilac', 'butter']
 export const cards: Card[] = catalog.cards.map(c => ({...c, tier: c.tier as Tier, bonus: c.bonus as Color, cost: c.cost as Cost, name: `Gem card ${c.id}`, motif: motifs[Number(c.id) % motifs.length]}))
-export const nobleCatalog: Noble[] = catalog.nobles.map(n => ({...n, cost: n.cost as Cost, tone: tones[Number(n.id) % tones.length]}))
+export const nobleCatalog: Noble[] = catalog.nobles.map(n => ({...n, cost: n.cost as Cost, colors: n.colors as Color[], tone: tones[Number(n.id) % tones.length]}))
 const emptyGems = (): Record<GemColor, number> => ({white:0,blue:0,green:0,red:0,black:0,gold:0})
 const player = (id: string, name: string, tone: Player['tone']): Player => ({id,name,tone,points:0,gems:emptyGems(),reserves:[null,null,null],reserveHidden:[false,false,false],purchased:{white:[],blue:[],green:[],red:[],black:[]},nobles:[]})
 function random(seed: string) { let h=2166136261; for(const ch of seed){h^=ch.codePointAt(0)!;h=Math.imul(h,16777619)}; return () => {h+=0x6d2b79f5;let v=h;v=Math.imul(v^(v>>>15),v|1);v^=v+Math.imul(v^(v>>>7),v|61);return ((v^(v>>>14))>>>0)/4294967296} }

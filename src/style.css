@@ -261,8 +261,20 @@ main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{
   .bank-grid{flex:1;align-content:space-around}
   .noble-section{align-self:stretch;height:100%}
   .noble-list{flex:1;grid-template-rows:repeat(3,minmax(0,1fr))}
-  .noble-tile{min-height:0}
+.noble-tile{min-height:0}
   .opponent-layout,.players-layout{width:100%;max-width:none}
+}
+
+/* Visitor artwork and names come from the catalog. Keep requirements below the portrait. */
+.noble-tile{justify-content:flex-end;gap:2px}
+.noble-points{z-index:1;background:#fff9eddb;border-radius:6px;padding:1px 4px}
+.noble-portrait{width:100%;height:auto;min-height:0;flex:1;align-items:center;overflow:hidden}
+.noble-portrait img{display:block;width:100%;height:100%;max-height:110px;object-fit:contain;filter:drop-shadow(0 2px 2px #5b4c3c35)}
+.noble-name{max-width:100%;color:#604b3d;font-size:.75rem;font-weight:900;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.noble-tile .cost-list{flex:none;margin-top:0}
+@media(max-width:1100px){
+  .noble-tile{min-height:130px}
+  .noble-portrait img{max-height:76px}
 }
 
 /* Slow movement in the garden stays behind every game control. */

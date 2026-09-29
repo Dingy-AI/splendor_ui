@@ -54,9 +54,11 @@ function MarketCard({ card, onClick, selected, reservable, actions }: { card: Ca
 }
 
 function NobleTile({ noble, onClick }: { noble: Noble; onClick?: () => void }) {
-  return <button type="button" onClick={onClick} disabled={!onClick} className={`noble-tile noble-${noble.tone}`} aria-label={`${noble.name}, 3 points`}>
-    <span className="noble-points">3 <span aria-hidden="true">✦</span></span>
-    <div className="noble-portrait" aria-hidden="true"><span className="noble-ear left" /><span className="noble-ear right" /><span className="noble-head"><span className="noble-eyes">• &nbsp; •</span><span className="noble-mouth">ᴗ</span></span></div>
+  const requirements = noble.colors.map(color => `${noble.cost[color]} ${color}`).join(', ')
+  return <button type="button" onClick={onClick} disabled={!onClick} className={`noble-tile noble-${noble.tone}`} aria-label={`${noble.animal_name}, ${noble.points} points, requires ${requirements} bonuses`}>
+    <span className="noble-points">{noble.points} <span aria-hidden="true">✦</span></span>
+    <div className="noble-portrait"><img src={noble.portrait} alt="" loading="lazy" /></div>
+    <span className="noble-name">{noble.animal_name}</span>
     <CostList cost={noble.cost} forNoble />
   </button>
 }
