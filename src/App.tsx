@@ -239,6 +239,7 @@ export default function App() {
     <div className="world-background" aria-hidden="true">
       <span className="world-glow" />
       <span className="world-sunbeam" />
+      <span className="world-night" /><span className="world-stars" /><span className="world-moon" />
       <span className="world-leaf world-leaf-one" /><span className="world-leaf world-leaf-two" />
       <span className="world-petal world-petal-one" /><span className="world-petal world-petal-two" /><span className="world-petal world-petal-three" />
       <span className="world-petal world-petal-four" /><span className="world-petal world-petal-five" /><span className="world-petal world-petal-six" />

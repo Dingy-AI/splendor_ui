@@ -280,3 +280,13 @@ main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{
 @keyframes firefly-drift{0%,100%{opacity:0;transform:translate3d(0,8px,0) scale(.7)}28%{opacity:.55;transform:translate3d(13px,-5px,0) scale(1)}60%{opacity:.25;transform:translate3d(-8px,-20px,0) scale(.8)}78%{opacity:.5;transform:translate3d(20px,-30px,0) scale(1)}}
 @media(max-width:750px){.world-sunbeam{width:60%;opacity:.2}.world-firefly{width:4px;height:4px}}
 @media(prefers-reduced-motion:reduce){.world-sunbeam,.world-petal-four,.world-petal-five,.world-petal-six,.world-firefly{animation:none}.world-firefly{opacity:0}.world-sunbeam{opacity:.18}}
+
+/* A gentle 72-second day and night cycle across the entire garden. */
+.world-night{position:absolute;inset:0;background:linear-gradient(180deg,#142648c4,#29334db2 55%,#2135429e);opacity:0;animation:nightfall 72s ease-in-out infinite}
+.world-stars{position:absolute;inset:0 0 45%;background:radial-gradient(circle at 13% 30%,#fff8db 0 2px,transparent 3px),radial-gradient(circle at 31% 15%,#fff8db 0 1px,transparent 2px),radial-gradient(circle at 57% 37%,#fff8db 0 2px,transparent 3px),radial-gradient(circle at 74% 19%,#fff8db 0 1px,transparent 2px),radial-gradient(circle at 88% 42%,#fff8db 0 2px,transparent 3px);opacity:0;animation:nightfall 72s ease-in-out infinite}
+.world-moon{position:absolute;top:9%;right:8%;width:52px;height:52px;border-radius:50%;background:#fff8d7;box-shadow:0 0 24px 9px #fff0bb88,0 0 80px 25px #e8eaff44;opacity:0;animation:moonrise 72s ease-in-out infinite}
+.game-board{animation:board-light-cycle 72s ease-in-out infinite}
+@keyframes nightfall{0%,35%,100%{opacity:0}51%,78%{opacity:1}94%{opacity:.12}}
+@keyframes moonrise{0%,38%,100%{opacity:0;transform:translateY(10px)}53%,77%{opacity:.85;transform:translateY(0)}93%{opacity:.1;transform:translateY(-6px)}}
+@keyframes board-light-cycle{0%,35%,100%{background-color:#4b684755}51%,78%{background-color:#233c5a9a}94%{background-color:#45655466}}
+@media(prefers-reduced-motion:reduce){.world-night,.world-stars,.world-moon,.game-board{animation:none}.world-night,.world-stars,.world-moon{opacity:0}}
