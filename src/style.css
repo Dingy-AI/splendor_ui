@@ -177,3 +177,106 @@ main{max-width:1660px;margin:auto;padding:28px clamp(14px,3vw,48px) 64px}.intro{
 @media(max-width:1100px){.world-background{background-image:url('/design/game-background-tall.png')}.game-board{background-image:none}}
 @media(max-width:750px){.intro-copy{padding:14px 16px}.world-leaf{width:26px;height:15px}.world-petal{width:9px;height:7px}}
 @media(prefers-reduced-motion:reduce){.world-glow,.world-leaf,.world-petal{animation:none}.world-petal{opacity:.3}}
+
+/* Face Blake across the market on wide screens. Keep the compact board stacked. */
+.opponent-layout,.players-layout{width:100%;max-width:1000px;margin-inline:auto}
+.opponent-layout{margin-bottom:16px}
+.players-layout{display:block;margin-top:18px}
+@media(max-width:1100px){
+  .game-board{display:flex;flex-direction:column}
+  .noble-section{order:0}
+  .market-layout{order:1}
+  .players-layout{order:2}
+  .opponent-layout{order:3;margin:14px auto 0}
+  .opponent-layout,.players-layout{min-width:0;max-width:none}
+}
+
+/* Reserves and purchased bonuses share the same player panel. */
+.player-summary{grid-template-columns:minmax(110px,125px) minmax(150px,175px) minmax(0,1fr);align-items:start}
+.player-holdings{min-width:0;display:grid;grid-template-columns:minmax(210px,0.9fr) minmax(0,1.6fr);align-items:start;gap:10px}
+.player-holdings .reserve-area{min-width:0;border-left:1px solid #c7b8a7;padding:0 0 0 10px}
+.player-holdings .purchased-area{min-width:0;margin:0;padding:7px;box-shadow:none}
+.player-holdings .purchased-columns{grid-template-columns:repeat(5,minmax(0,1fr))}
+.player-holdings .column-heading span{display:none}
+@media(max-width:1100px){
+  .player-summary{grid-template-columns:minmax(115px,1fr) minmax(180px,1.5fr)}
+  .player-holdings{grid-column:1 / -1}
+  .player-holdings .reserve-area{border-left:0;border-top:1px solid #c7b8a7;padding:10px 0 0}
+}
+@media(max-width:600px){
+  .player-summary{grid-template-columns:minmax(0,1fr)}
+  .player-holdings{grid-column:auto;grid-template-columns:minmax(0,1fr)}
+}
+
+/* Center the bank, market, and visitors as one desktop group. */
+@media(min-width:1250px){
+  .game-board{display:grid;grid-template-columns:minmax(0,1000px) 180px;justify-content:center;column-gap:12px;row-gap:12px}
+  .opponent-layout{grid-column:1 / -1;margin-bottom:0}
+  .noble-section{grid-column:2;grid-row:2;align-self:start;width:100%;max-width:none;margin:0;flex-direction:column;gap:8px}
+  .noble-section .section-label{width:100%;min-height:42px}
+  .noble-list{grid-template-columns:minmax(0,1fr);gap:8px}
+  .noble-tile{min-height:105px}
+  .market-layout{grid-column:1;grid-row:2;width:100%;max-width:1000px;margin:0;grid-template-columns:200px minmax(0,1fr);gap:14px;align-items:start}
+  .market-row{grid-template-columns:86px minmax(0,1fr);gap:8px}
+  .market-cards{gap:7px}
+  .market-card-shell,.market-card,.tier-deck-shell{height:180px}
+  .market-card .card-art{height:122px}
+  .player-holdings .purchased-stack{max-height:105px;overflow-y:auto;scrollbar-width:thin}
+  .players-layout{grid-column:1 / -1;margin-top:0}
+}
+
+.music-start-prompt,.music-problem{position:fixed;z-index:10;right:18px;bottom:18px;max-width:min(340px,calc(100vw - 36px));border:2px solid #d8bf83;border-radius:12px;background:#fff9e8;color:#40543d;box-shadow:0 8px 25px #26392266;padding:10px 14px;font-size:.86rem;font-weight:800}
+.music-start-prompt:hover{background:#fff1c9}
+.music-start-prompt:focus-visible{outline:3px solid #f8d567;outline-offset:2px}
+
+/* Six gem holdings fill two rows in each player panel. */
+.player-gems{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));align-self:stretch;min-height:112px;gap:6px 4px;padding:3px 5px}
+.player-gem{justify-content:center}
+.player-gem .gem{width:27px;height:27px;border-width:2px}
+.player-gem>span:last-child{font-size:1.35rem;line-height:1;font-weight:900}
+
+/* Tablet player panels give the five purchased columns the full width. */
+@media(min-width:601px) and (max-width:1100px){
+  .player-holdings{grid-template-columns:minmax(0,1fr)}
+  .player-holdings .reserve-area{max-width:500px}
+  .player-holdings .purchased-area,.player-holdings .purchased-columns{width:100%}
+}
+
+/* Group all visitors in a panel that matches the gem bank. */
+.noble-section{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:10px;background:#f8f2e5;border:2px solid #d7ceb5;border-radius:17px;padding:14px 11px;box-shadow:0 4px 0 #43553f5c}
+.noble-section h2{text-align:center;font-size:1.05rem;color:#5a4938;margin:0 0 3px}
+.noble-section h2 span{font-size:.8rem;color:#9aaf83}
+.noble-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(min-width:1250px){.noble-list{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:1100px){
+  .noble-section{display:block;padding:10px 8px}
+  .noble-section h2{margin-bottom:10px}
+  .noble-list{grid-template-columns:none}
+}
+
+/* Match the two side panels' height and align both players to their outer edges. */
+@media(min-width:1250px){
+  .market-layout{align-items:stretch}
+  .bank-panel{display:flex;flex-direction:column;align-self:stretch}
+  .bank-grid{flex:1;align-content:space-around}
+  .noble-section{align-self:stretch;height:100%}
+  .noble-list{flex:1;grid-template-rows:repeat(3,minmax(0,1fr))}
+  .noble-tile{min-height:0}
+  .opponent-layout,.players-layout{width:100%;max-width:none}
+}
+
+/* Slow movement in the garden stays behind every game control. */
+.world-sunbeam{position:absolute;top:-20%;right:1%;width:38%;height:130%;transform:rotate(19deg);transform-origin:top center;background:linear-gradient(90deg,transparent,#fff5c520,transparent 65%);opacity:.3;animation:sunbeam-shift 26s ease-in-out infinite alternate}
+.world-petal-four{top:19%;left:22%;animation:petal-wander 23s ease-in-out -6s infinite alternate}
+.world-petal-five{top:71%;right:13%;animation:petal-wander 28s ease-in-out -14s infinite alternate-reverse}
+.world-petal-six{top:83%;left:43%;animation:petal-wander 25s ease-in-out -10s infinite alternate}
+.world-firefly{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff4bf;box-shadow:0 0 9px 4px #ffe9a079,0 0 20px 8px #e2f1b54a;opacity:0;animation:firefly-drift 12s ease-in-out infinite}
+.world-firefly-one{top:24%;left:11%;animation-delay:-2s}
+.world-firefly-two{top:46%;right:8%;animation-delay:-8s;animation-duration:15s}
+.world-firefly-three{bottom:18%;left:18%;animation-delay:-5s;animation-duration:17s}
+.world-firefly-four{top:12%;right:24%;animation-delay:-12s;animation-duration:19s}
+@keyframes sunbeam-shift{from{opacity:.18;transform:translateX(-3%) rotate(18deg)}to{opacity:.5;transform:translateX(4%) rotate(21deg)}}
+@keyframes petal-wander{from{opacity:.1;transform:translate3d(-14px,-10px,0) rotate(-30deg)}50%{opacity:.48}to{opacity:.15;transform:translate3d(48px,44px,0) rotate(95deg)}}
+@keyframes firefly-drift{0%,100%{opacity:0;transform:translate3d(0,8px,0) scale(.7)}28%{opacity:.55;transform:translate3d(13px,-5px,0) scale(1)}60%{opacity:.25;transform:translate3d(-8px,-20px,0) scale(.8)}78%{opacity:.5;transform:translate3d(20px,-30px,0) scale(1)}}
+@media(max-width:750px){.world-sunbeam{width:60%;opacity:.2}.world-firefly{width:4px;height:4px}}
+@media(prefers-reduced-motion:reduce){.world-sunbeam,.world-petal-four,.world-petal-five,.world-petal-six,.world-firefly{animation:none}.world-firefly{opacity:0}.world-sunbeam{opacity:.18}}

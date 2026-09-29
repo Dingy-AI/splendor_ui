@@ -24,10 +24,11 @@ function actionLabel(action: Action): string {
 
 export default function App() {
   const musicRef = useRef<HTMLAudioElement>(null)
-  const musicWantedRef = useRef(false)
+  const musicWantedRef = useRef(true)
   const trackIndexRef = useRef(0)
   const [musicOn, setMusicOn] = useState(false)
   const [musicTracks, setMusicTracks] = useState<string[]>([])
+  const [musicIssue, setMusicIssue] = useState<'blocked' | 'empty' | 'playlist' | 'failed' | null>(null)
   const [game, setGame] = useState<Game>(() => createGame(initialSeed()))
   const [seedDraft, setSeedDraft] = useState(game.seed)
   const [selected, setSelected] = useState<{ tier: Tier; slot: number } | null>(null)
@@ -46,10 +47,34 @@ export default function App() {
         if (!response.ok) throw new Error('Playlist unavailable')
         return response.json() as Promise<{ tracks: string[] }>
       })
-      .then(playlist => setMusicTracks(playlist.tracks))
-      .catch(() => { /* Music is optional if no playlist was generated. */ })
+      .then(playlist => {
+        const tracks = Array.isArray(playlist.tracks) ? playlist.tracks.filter(track => typeof track === 'string') : []
+        setMusicTracks(tracks)
+        if (!tracks.length) setMusicIssue('empty')
+      })
+      .catch(error => {
+        if (error instanceof Error && error.name !== 'AbortError') setMusicIssue('playlist')
+      })
     return () => controller.abort()
   }, [])
+
+  useEffect(() => {
+    if (musicTracks.length && musicWantedRef.current) void playTrack(trackIndexRef.current)
+  }, [musicTracks])
+
+  useEffect(() => {
+    if (!musicTracks.length || musicOn) return
+    const startOnInteraction = (event: Event) => {
+      if (!musicWantedRef.current || (event.target instanceof Element && event.target.closest('.music-toggle'))) return
+      void playTrack(trackIndexRef.current)
+    }
+    document.addEventListener('pointerdown', startOnInteraction, true)
+    document.addEventListener('keydown', startOnInteraction, true)
+    return () => {
+      document.removeEventListener('pointerdown', startOnInteraction, true)
+      document.removeEventListener('keydown', startOnInteraction, true)
+    }
+  }, [musicTracks, musicOn])
 
   useEffect(() => {
     if (game.currentPlayer !== 1 || game.phase === 'over') return
@@ -149,17 +174,26 @@ export default function App() {
     if (!music || !musicTracks.length || !musicWantedRef.current) return
     const nextIndex = index % musicTracks.length
     trackIndexRef.current = nextIndex
-    music.src = musicTracks[nextIndex]
+    if (music.getAttribute('src') !== musicTracks[nextIndex]) music.src = musicTracks[nextIndex]
     music.volume = 0.65
     try {
       await music.play()
-      if (musicWantedRef.current) setMusicOn(true)
+      if (musicWantedRef.current) {
+        setMusicOn(true)
+        setMusicIssue(null)
+      }
       else music.pause()
-    } catch {
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'NotAllowedError') {
+        setMusicOn(false)
+        setMusicIssue('blocked')
+        return
+      }
       if (musicWantedRef.current && failed + 1 < musicTracks.length) await playTrack(index + 1, failed + 1)
       else if (musicWantedRef.current) {
         musicWantedRef.current = false
         setMusicOn(false)
+        setMusicIssue('failed')
         setMessage('Could not play the M4A songs in this browser.')
       }
     }
@@ -172,6 +206,7 @@ export default function App() {
       musicWantedRef.current = false
       music.pause()
       setMusicOn(false)
+      setMusicIssue(null)
       return
     }
     if (!musicTracks.length) {
@@ -186,9 +221,16 @@ export default function App() {
     }
     try {
       await music.play()
-      if (musicWantedRef.current) setMusicOn(true)
+      if (musicWantedRef.current) {
+        setMusicOn(true)
+        setMusicIssue(null)
+      }
       else music.pause()
-    } catch {
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'NotAllowedError') {
+        setMusicIssue('blocked')
+        return
+      }
       await playTrack(trackIndexRef.current + 1)
     }
   }
@@ -196,11 +238,16 @@ export default function App() {
   return <div className="app-shell">
     <div className="world-background" aria-hidden="true">
       <span className="world-glow" />
+      <span className="world-sunbeam" />
       <span className="world-leaf world-leaf-one" /><span className="world-leaf world-leaf-two" />
       <span className="world-petal world-petal-one" /><span className="world-petal world-petal-two" /><span className="world-petal world-petal-three" />
+      <span className="world-petal world-petal-four" /><span className="world-petal world-petal-five" /><span className="world-petal world-petal-six" />
+      <span className="world-firefly world-firefly-one" /><span className="world-firefly world-firefly-two" /><span className="world-firefly world-firefly-three" /><span className="world-firefly world-firefly-four" />
     </div>
     <audio ref={musicRef} preload="none" onEnded={() => { if (musicWantedRef.current) void playTrack(trackIndexRef.current + 1) }} />
-    <header className="site-header"><div className="brand"><span className="brand-gem" aria-hidden="true">◆</span> Blake</div><div className="header-actions"><button type="button" className="music-toggle" onClick={toggleMusic} aria-pressed={musicOn} aria-label={musicOn ? 'Mute background music' : 'Play background music'}><span aria-hidden="true">♫</span> {musicOn ? 'Music on' : 'Music off'}</button><nav aria-label="Main navigation"><span className="nav-current" aria-current="page">Play</span></nav></div></header>
+    <header className="site-header"><div className="brand"><span className="brand-gem" aria-hidden="true">◆</span> Blake</div><div className="header-actions"><button type="button" className="music-toggle" onClick={toggleMusic} aria-pressed={musicOn} aria-label={musicOn ? 'Mute background music' : 'Play background music'}><span aria-hidden="true">♫</span> {musicOn ? 'Music on' : musicIssue === 'blocked' ? 'Start music' : 'Music off'}</button><nav aria-label="Main navigation"><span className="nav-current" aria-current="page">Play</span></nav></div></header>
+    {musicIssue === 'blocked' && <button type="button" className="music-start-prompt" onClick={toggleMusic}>♫ Start music</button>}
+    {(musicIssue === 'empty' || musicIssue === 'playlist' || musicIssue === 'failed') && <div className="music-problem" role="status">{musicIssue === 'empty' ? 'No .m4a songs found in public/audio. Add songs and restart npm run dev.' : musicIssue === 'playlist' ? 'Music playlist unavailable. Restart npm run dev to regenerate it.' : 'These .m4a files could not be played by this browser.'}</div>}
     <main>
       <div className="intro"><div className="intro-copy"><p className="eyebrow">Play · two players</p><h1>A little world of gems</h1><p className="lead">Play a complete Splendor game against Blake. The board uses the supplied card catalog and rules. Blake currently chooses moves with a simple local strategy while we prepare the model.</p></div>
         <form className="seed-panel" onSubmit={e => { e.preventDefault(); reset(seedDraft) }}><h2>New seeded game</h2><p>Use the same seed to replay the same deck and visitor setup. Starting over resets all moves.</p><label htmlFor="game-seed">Game seed</label><div className="seed-row"><input id="game-seed" value={seedDraft} onChange={e => setSeedDraft(e.target.value)} spellCheck={false} /><button type="submit">Start over</button></div><button type="button" className="seed-random" onClick={() => reset(makeSeed())}>✦ Generate a new game</button></form>

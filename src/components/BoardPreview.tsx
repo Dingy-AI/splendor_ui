@@ -106,12 +106,14 @@ function PlayerArea({ player, onReserve, selectedReserve, reservedActions }: { p
     <div className="player-summary">
       <div className="player-identity"><div className="player-avatar" aria-hidden="true"><Gem color={player.tone === 'rose' ? 'red' : 'blue'} /></div><div><h2>{player.name}</h2><span>{player.points} points</span></div></div>
       <div className="player-gems" aria-label="Gem holdings">{([...COLORS, 'gold'] as GemColor[]).map((color) => <div className="player-gem" key={color} aria-label={`${player.gems[color]} ${GEM_NAMES[color]}`}><Gem color={color} small /><span aria-hidden="true">{player.gems[color]}</span></div>)}</div>
-      <div className="reserve-area"><h3>Reserved <span>{player.reserves.filter(Boolean).length} / 3</span></h3><div className="reserve-slots">{player.reserves.map((card, index) => <div className={`reserve-slot${selectedReserve === index ? ' reserve-slot-selected' : ''}`} key={index} aria-label={card ? undefined : `Empty reserve slot ${index + 1} of 3`}>{card ? <ReservedCard card={card} hidden={player.id==='p2' && player.reserveHidden[index]} onClick={onReserve ? () => onReserve(index) : undefined} /> : <span aria-hidden="true">✧</span>}{card && selectedReserve === index && reservedActions && <div className="reserve-card-actions" role="group" aria-label={`Actions for reserved ${card.name}`}><button type="button" className="card-overlay-close" onClick={reservedActions.close} aria-label="Close reserved card actions">✕</button>{reservedActions.buy ? <button type="button" onClick={reservedActions.buy}>Buy</button> : <span>Need gems</span>}</div>}</div>)}</div></div>
-    </div>
-    <div className="purchased-area"><h3>Purchased cards <span>· permanent bonuses</span></h3><div className="purchased-columns">{COLORS.map((color) => <div className={`purchased-column column-${color}`} key={color} aria-label={`${color} bonus cards, ${player.purchased[color].length}`}>
+      <div className="player-holdings">
+        <div className="reserve-area"><h3>Reserved <span>{player.reserves.filter(Boolean).length} / 3</span></h3><div className="reserve-slots">{player.reserves.map((card, index) => <div className={`reserve-slot${selectedReserve === index ? ' reserve-slot-selected' : ''}`} key={index} aria-label={card ? undefined : `Empty reserve slot ${index + 1} of 3`}>{card ? <ReservedCard card={card} hidden={player.id==='p2' && player.reserveHidden[index]} onClick={onReserve ? () => onReserve(index) : undefined} /> : <span aria-hidden="true">✧</span>}{card && selectedReserve === index && reservedActions && <div className="reserve-card-actions" role="group" aria-label={`Actions for reserved ${card.name}`}><button type="button" className="card-overlay-close" onClick={reservedActions.close} aria-label="Close reserved card actions">✕</button>{reservedActions.buy ? <button type="button" onClick={reservedActions.buy}>Buy</button> : <span>Need gems</span>}</div>}</div>)}</div></div>
+        <div className="purchased-area"><h3>Purchased cards <span>· permanent bonuses</span></h3><div className="purchased-columns">{COLORS.map((color) => <div className={`purchased-column column-${color}`} key={color} aria-label={`${color} bonus cards, ${player.purchased[color].length}`}>
       <div className="column-heading"><Gem color={color} small /><span>{color}</span><b>{player.purchased[color].length}</b></div>
       <div className="purchased-stack">{player.purchased[color].length ? player.purchased[color].map((card) => <div className={`purchased-mini scene-${card.motif}`} key={card.id} title={card.name}><CardMotif motif={card.motif} /><span className="mini-point">{card.points}</span></div>) : <div className="stack-empty" aria-hidden="true">✧</div>}</div>
-    </div>)}</div></div>
+        </div>)}</div></div>
+      </div>
+    </div>
   </section>
 }
 
@@ -130,7 +132,8 @@ export default function BoardPreview({ board, onCard, onNoble, onReserve, onDeck
   const tiers = [3, 2, 1] as const
   const reserveFull = board.players[0].reserves.every(card => card !== null)
   return <div className="game-board">
-    <section className="noble-section" aria-labelledby="noble-title"><div className="section-label"><h2 id="noble-title">Visitors</h2><span>✦ ✦ ✦</span></div><div className="noble-list">{board.nobles.map((noble, slot) => noble ? <NobleTile noble={noble} key={slot} onClick={onNoble ? () => onNoble(slot) : undefined} /> : <div className="noble-tile empty-tile" key={slot}>Visited</div>)}</div></section>
+    <div className="opponent-layout"><PlayerArea player={board.players[1]} /></div>
+    <section className="noble-section" aria-labelledby="noble-title"><h2 id="noble-title">Visitors <span aria-hidden="true">✦</span></h2><div className="noble-list">{board.nobles.map((noble, slot) => noble ? <NobleTile noble={noble} key={slot} onClick={onNoble ? () => onNoble(slot) : undefined} /> : <div className="noble-tile empty-tile" key={slot}>Visited</div>)}</div></section>
     <div className="market-layout">
       <GemBank bank={board.bank} selected={selectedGems} onGem={onGem} onGold={onGold} reserveMode={reserveMode} reserveFull={reserveFull} onConfirm={onConfirmGems} onClear={onClearGems} canConfirm={canConfirmGems} />
       <section className="market-panel" aria-label="Development card market">{tiers.map((tier) => <div className="market-row" key={tier}>
@@ -138,6 +141,6 @@ export default function BoardPreview({ board, onCard, onNoble, onReserve, onDeck
         <div className="market-cards">{board.market[tier].map((card, slot) => card ? <MarketCard card={card} key={slot} selected={selected===`${tier}-${slot}`} actions={selected===`${tier}-${slot}` ? marketActions : undefined} reservable={reserveMode && !reserveFull} onClick={onCard ? () => onCard(tier, slot) : undefined} /> : <div className="market-card empty-tile" key={slot}>Empty</div>)}</div>
       </div>)}</section>
     </div>
-    <div className="players-layout">{board.players.map((player) => <PlayerArea player={player} key={player.id} onReserve={player.id==='p1' ? onReserve : undefined} selectedReserve={player.id==='p1' ? selectedReserve : null} reservedActions={player.id==='p1' ? reservedActions : undefined} />)}</div>
+    <div className="players-layout"><PlayerArea player={board.players[0]} onReserve={onReserve} selectedReserve={selectedReserve} reservedActions={reservedActions} /></div>
   </div>
 }
