@@ -1,0 +1,337 @@
+[
+  {
+    "id": 40,
+    "name": "Cinder Bell Foundry",
+    "file": "card_40_cinder_bell_foundry.webp",
+    "bonus": "white",
+    "cost": {
+      "red": 5
+    },
+    "points": 2
+  },
+  {
+    "id": 41,
+    "name": "Pearlwater Amphitheater",
+    "file": "card_41_pearlwater_amphitheater.webp",
+    "bonus": "blue",
+    "cost": {
+      "blue": 5
+    },
+    "points": 2
+  },
+  {
+    "id": 42,
+    "name": "Verdant Loomhouse",
+    "file": "card_42_verdant_loomhouse.webp",
+    "bonus": "green",
+    "cost": {
+      "green": 5
+    },
+    "points": 2
+  },
+  {
+    "id": 43,
+    "name": "Basalt Hearth Tribunal",
+    "file": "card_43_basalt_hearth_tribunal.webp",
+    "bonus": "red",
+    "cost": {
+      "black": 5
+    },
+    "points": 2
+  },
+  {
+    "id": 44,
+    "name": "Windcatcher Aviary",
+    "file": "card_44_windcatcher_aviary.webp",
+    "bonus": "black",
+    "cost": {
+      "white": 5
+    },
+    "points": 2
+  },
+  {
+    "id": 45,
+    "name": "Sunweave Aerodrome",
+    "file": "card_45_sunweave_aerodrome.webp",
+    "bonus": "white",
+    "cost": {
+      "white": 6
+    },
+    "points": 3
+  },
+  {
+    "id": 46,
+    "name": "Tidal Observatory",
+    "file": "card_46_tidal_observatory.webp",
+    "bonus": "blue",
+    "cost": {
+      "blue": 6
+    },
+    "points": 3
+  },
+  {
+    "id": 47,
+    "name": "Heartwood Library",
+    "file": "card_47_heartwood_library.webp",
+    "bonus": "green",
+    "cost": {
+      "green": 6
+    },
+    "points": 3
+  },
+  {
+    "id": 48,
+    "name": "Flameglass Cathedral",
+    "file": "card_48_flameglass_cathedral.webp",
+    "bonus": "red",
+    "cost": {
+      "red": 6
+    },
+    "points": 3
+  },
+  {
+    "id": 49,
+    "name": "Deepstone Causeway",
+    "file": "card_49_deepstone_causeway.webp",
+    "bonus": "black",
+    "cost": {
+      "black": 6
+    },
+    "points": 3
+  },
+  {
+    "id": 50,
+    "name": "Rootfire Bathhouse",
+    "file": "card_50_rootfire_bathhouse.webp",
+    "bonus": "white",
+    "cost": {
+      "green": 3,
+      "red": 2,
+      "black": 2
+    },
+    "points": 1
+  },
+  {
+    "id": 51,
+    "name": "Steamflower Conservatory",
+    "file": "card_51_steamflower_conservatory.webp",
+    "bonus": "blue",
+    "cost": {
+      "blue": 2,
+      "green": 2,
+      "red": 3
+    },
+    "points": 1
+  },
+  {
+    "id": 52,
+    "name": "Sea Lantern Lighthouse",
+    "file": "card_52_sea_lantern_lighthouse.webp",
+    "bonus": "green",
+    "cost": {
+      "white": 2,
+      "blue": 3,
+      "black": 2
+    },
+    "points": 1
+  },
+  {
+    "id": 53,
+    "name": "Earth and Sky Kiln",
+    "file": "card_53_earth_and_sky_kiln.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 2,
+      "red": 2,
+      "black": 3
+    },
+    "points": 1
+  },
+  {
+    "id": 54,
+    "name": "Cloud Rain Gallery",
+    "file": "card_54_cloud_rain_gallery.webp",
+    "bonus": "black",
+    "cost": {
+      "white": 3,
+      "blue": 2,
+      "green": 2
+    },
+    "points": 1
+  },
+  {
+    "id": 55,
+    "name": "Ember Quarry Palace",
+    "file": "card_55_ember_quarry_palace.webp",
+    "bonus": "white",
+    "cost": {
+      "green": 1,
+      "red": 4,
+      "black": 2
+    },
+    "points": 2
+  },
+  {
+    "id": 56,
+    "name": "Starwell Archive",
+    "file": "card_56_starwell_archive.webp",
+    "bonus": "blue",
+    "cost": {
+      "white": 2,
+      "red": 1,
+      "black": 4
+    },
+    "points": 2
+  },
+  {
+    "id": 57,
+    "name": "Skyborne Harbor",
+    "file": "card_57_skyborne_harbor.webp",
+    "bonus": "green",
+    "cost": {
+      "white": 4,
+      "blue": 2,
+      "black": 1
+    },
+    "points": 2
+  },
+  {
+    "id": 58,
+    "name": "Mangrove Tide Palace",
+    "file": "card_58_mangrove_tide_palace.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 1,
+      "blue": 4,
+      "green": 2
+    },
+    "points": 2
+  },
+  {
+    "id": 59,
+    "name": "Green Flame Guild",
+    "file": "card_59_green_flame_guild.webp",
+    "bonus": "black",
+    "cost": {
+      "blue": 1,
+      "green": 4,
+      "red": 2
+    },
+    "points": 2
+  },
+  {
+    "id": 60,
+    "name": "Crucible Bridge",
+    "file": "card_60_crucible_bridge.webp",
+    "bonus": "white",
+    "cost": {
+      "red": 5,
+      "black": 3
+    },
+    "points": 2
+  },
+  {
+    "id": 61,
+    "name": "Cloudwater Aqueduct",
+    "file": "card_61_cloudwater_aqueduct.webp",
+    "bonus": "blue",
+    "cost": {
+      "white": 5,
+      "blue": 3
+    },
+    "points": 2
+  },
+  {
+    "id": 62,
+    "name": "Coral Root Sanctuary",
+    "file": "card_62_coral_root_sanctuary.webp",
+    "bonus": "green",
+    "cost": {
+      "blue": 5,
+      "green": 3
+    },
+    "points": 2
+  },
+  {
+    "id": 63,
+    "name": "Skyshaft Citadel",
+    "file": "card_63_skyshaft_citadel.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 3,
+      "black": 5
+    },
+    "points": 2
+  },
+  {
+    "id": 64,
+    "name": "Firefly Canopy Theatre",
+    "file": "card_64_firefly_canopy_theatre.webp",
+    "bonus": "black",
+    "cost": {
+      "green": 5,
+      "red": 3
+    },
+    "points": 2
+  },
+  {
+    "id": 65,
+    "name": "Steamwind Beacon",
+    "file": "card_65_steamwind_beacon.webp",
+    "bonus": "white",
+    "cost": {
+      "white": 2,
+      "blue": 3,
+      "red": 3
+    },
+    "points": 1
+  },
+  {
+    "id": 66,
+    "name": "Hollowroot Reservoir",
+    "file": "card_66_hollowroot_reservoir.webp",
+    "bonus": "blue",
+    "cost": {
+      "blue": 2,
+      "green": 3,
+      "black": 3
+    },
+    "points": 1
+  },
+  {
+    "id": 67,
+    "name": "Dawnleaf Hall",
+    "file": "card_67_dawnleaf_hall.webp",
+    "bonus": "green",
+    "cost": {
+      "white": 3,
+      "green": 2,
+      "red": 3
+    },
+    "points": 1
+  },
+  {
+    "id": 68,
+    "name": "Abyssal Glassworks",
+    "file": "card_68_abyssal_glassworks.webp",
+    "bonus": "red",
+    "cost": {
+      "blue": 3,
+      "red": 2,
+      "black": 3
+    },
+    "points": 1
+  },
+  {
+    "id": 69,
+    "name": "Cloudroot Council",
+    "file": "card_69_cloudroot_council.webp",
+    "bonus": "black",
+    "cost": {
+      "white": 3,
+      "green": 3,
+      "black": 2
+    },
+    "points": 1
+  }
+]

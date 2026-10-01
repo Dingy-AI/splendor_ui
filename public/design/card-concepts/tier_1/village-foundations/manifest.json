@@ -1,0 +1,462 @@
+[
+  {
+    "id": 0,
+    "name": "Tidepool Dock",
+    "file": "card_00_tidepool_dock.webp",
+    "bonus": "white",
+    "cost": {
+      "blue": 3
+    },
+    "scene": "a tiny white-roofed ferry shed and wooden fishing dock beside turquoise tidepools"
+  },
+  {
+    "id": 1,
+    "name": "Slatewell Springhouse",
+    "file": "card_01_slatewell_springhouse.webp",
+    "bonus": "blue",
+    "cost": {
+      "black": 3
+    },
+    "scene": "a small stone springhouse set into dark slate, water flowing into a blue basin"
+  },
+  {
+    "id": 2,
+    "name": "Emberclay Pottery",
+    "file": "card_02_emberclay_pottery.webp",
+    "bonus": "green",
+    "cost": {
+      "red": 3
+    },
+    "scene": "a little red clay pottery workshop with a glowing kiln, a few climbing green vines"
+  },
+  {
+    "id": 3,
+    "name": "Cloudstep Post House",
+    "file": "card_03_cloudstep_post_house.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 3
+    },
+    "scene": "a tiny white hilltop post house with fluttering mail flags and a warm red doorway"
+  },
+  {
+    "id": 4,
+    "name": "Mossroot Cellar",
+    "file": "card_04_mossroot_cellar.webp",
+    "bonus": "black",
+    "cost": {
+      "green": 3
+    },
+    "scene": "a low moss-covered root cellar among old forest roots and exposed dark earth"
+  },
+  {
+    "id": 5,
+    "name": "Emberstone Bakery",
+    "file": "card_05_emberstone_bakery.webp",
+    "bonus": "white",
+    "cost": {
+      "red": 2,
+      "black": 1
+    },
+    "scene": "a small village bakery with glowing hearth, dark stone chimney and pale flour sacks"
+  },
+  {
+    "id": 6,
+    "name": "Stonewind Ferry Shelter",
+    "file": "card_06_stonewind_ferry_shelter.webp",
+    "bonus": "blue",
+    "cost": {
+      "white": 1,
+      "black": 2
+    },
+    "scene": "a humble ferry waiting shelter carved from dark stone with white wind sails and blue water beyond"
+  },
+  {
+    "id": 7,
+    "name": "Cloudbloom Nursery",
+    "file": "card_07_cloudbloom_nursery.webp",
+    "bonus": "green",
+    "cost": {
+      "white": 2,
+      "blue": 1
+    },
+    "scene": "a tiny airy white greenhouse for seedlings with soft blue rain barrels and green shoots"
+  },
+  {
+    "id": 8,
+    "name": "Brineglass Lantern Shop",
+    "file": "card_08_brineglass_lantern_shop.webp",
+    "bonus": "red",
+    "cost": {
+      "blue": 2,
+      "green": 1
+    },
+    "scene": "a small seaside lantern workshop with blue glass lamps, green seaweed and one warm ember glow"
+  },
+  {
+    "id": 9,
+    "name": "Fernfire Charcoal Hut",
+    "file": "card_09_fernfire_charcoal_hut.webp",
+    "bonus": "black",
+    "cost": {
+      "green": 2,
+      "red": 1
+    },
+    "scene": "a modest charcoal maker's hut wrapped in forest ferns with a little red smoking pit"
+  },
+  {
+    "id": 10,
+    "name": "Canopy Message Hut",
+    "file": "card_10_canopy_message_hut.webp",
+    "bonus": "white",
+    "cost": {
+      "green": 4
+    },
+    "scene": "a little message house built between green treetops, light linen pennants catching the breeze"
+  },
+  {
+    "id": 11,
+    "name": "Emberpool Bathhouse",
+    "file": "card_11_emberpool_bathhouse.webp",
+    "bonus": "blue",
+    "cost": {
+      "red": 4
+    },
+    "scene": "a small bathhouse beside red geothermal pools, blue-tiled basins and a low smoky roof"
+  },
+  {
+    "id": 12,
+    "name": "Mossy Quarry Shed",
+    "file": "card_12_mossy_quarry_shed.webp",
+    "bonus": "green",
+    "cost": {
+      "black": 4
+    },
+    "scene": "a small black-stone quarry shed with stacked slate and green moss softening the edges"
+  },
+  {
+    "id": 13,
+    "name": "Highwind Hearth",
+    "file": "card_13_highwind_hearth.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 4
+    },
+    "scene": "a small windswept white hill house with a single cozy red hearth seen through its doorway"
+  },
+  {
+    "id": 14,
+    "name": "Tidecut Stone Depot",
+    "file": "card_14_tidecut_stone_depot.webp",
+    "bonus": "black",
+    "cost": {
+      "blue": 4
+    },
+    "scene": "a humble dark-stone storage shed at a bright blue tidal inlet, cut blocks on a tiny jetty"
+  },
+  {
+    "id": 15,
+    "name": "Cliffside Weather House",
+    "file": "card_15_cliffside_weather_house.webp",
+    "bonus": "white",
+    "cost": {
+      "blue": 2,
+      "black": 2
+    },
+    "scene": "a little weather station on a dark sea cliff, blue surf below and pale fabric wind vanes"
+  },
+  {
+    "id": 16,
+    "name": "Rootstone Watermill",
+    "file": "card_16_rootstone_watermill.webp",
+    "bonus": "blue",
+    "cost": {
+      "green": 2,
+      "black": 2
+    },
+    "scene": "a small mossy stone watermill among forest roots, a blue creek turning its wooden wheel"
+  },
+  {
+    "id": 17,
+    "name": "Steamgarden Glasshouse",
+    "file": "card_17_steamgarden_glasshouse.webp",
+    "bonus": "green",
+    "cost": {
+      "blue": 2,
+      "red": 2
+    },
+    "scene": "a small vegetable glasshouse fed by a blue stream and a red warm spring, green seedlings"
+  },
+  {
+    "id": 18,
+    "name": "Sunwhirl Kiln",
+    "file": "card_18_sunwhirl_kiln.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 2,
+      "red": 2
+    },
+    "scene": "a compact pottery kiln on a pale windy hillside, red heat shining through its brick mouth"
+  },
+  {
+    "id": 19,
+    "name": "Meadowstone Lodge",
+    "file": "card_19_meadowstone_lodge.webp",
+    "bonus": "black",
+    "cost": {
+      "white": 2,
+      "green": 2
+    },
+    "scene": "a little pale stone field lodge nestled among green grasses with a dark slate foundation"
+  },
+  {
+    "id": 20,
+    "name": "Crossroads Rest House",
+    "file": "card_20_crossroads_rest_house.webp",
+    "bonus": "white",
+    "cost": {
+      "blue": 1,
+      "green": 1,
+      "red": 1,
+      "black": 1
+    },
+    "scene": "a small welcoming rest house at the meeting of sea path, forest trail, red hearth road and stone track, light roof"
+  },
+  {
+    "id": 21,
+    "name": "Fourways Canal Landing",
+    "file": "card_21_fourways_canal_landing.webp",
+    "bonus": "blue",
+    "cost": {
+      "white": 1,
+      "green": 1,
+      "red": 1,
+      "black": 1
+    },
+    "scene": "a modest blue canal landing with a small white booth, green planters, red lantern and dark stone steps"
+  },
+  {
+    "id": 22,
+    "name": "Herb Commons",
+    "file": "card_22_herb_commons.webp",
+    "bonus": "green",
+    "cost": {
+      "white": 1,
+      "blue": 1,
+      "red": 1,
+      "black": 1
+    },
+    "scene": "a tiny communal green herb garden and wooden tool shed with sea-blue rain barrel, pale sailcloth and warm lantern"
+  },
+  {
+    "id": 23,
+    "name": "Village Forge Yard",
+    "file": "card_23_village_forge_yard.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 1,
+      "blue": 1,
+      "green": 1,
+      "black": 1
+    },
+    "scene": "a small red-glowing forge yard with a white awning, blue water trough, green vines and stone anvil"
+  },
+  {
+    "id": 24,
+    "name": "Stonegate Supply Shed",
+    "file": "card_24_stonegate_supply_shed.webp",
+    "bonus": "black",
+    "cost": {
+      "white": 1,
+      "blue": 1,
+      "green": 1,
+      "red": 1
+    },
+    "scene": "a low dark stone supply shed where four village trails meet, colored cloth and plants as modest details"
+  },
+  {
+    "id": 25,
+    "name": "Tideforest Lookout",
+    "file": "card_25_tideforest_lookout.webp",
+    "bonus": "white",
+    "cost": {
+      "blue": 2,
+      "green": 2,
+      "black": 1
+    },
+    "scene": "a little wooden lookout hut where lush green forest meets blue sea, dark rock footing and white banner"
+  },
+  {
+    "id": 26,
+    "name": "Rainfire Washhouse",
+    "file": "card_26_rainfire_washhouse.webp",
+    "bonus": "blue",
+    "cost": {
+      "white": 1,
+      "green": 2,
+      "red": 2
+    },
+    "scene": "a small village washhouse with red heated water, green vines and blue basins under a pale roof"
+  },
+  {
+    "id": 27,
+    "name": "Cinderroot Mushroom House",
+    "file": "card_27_cinderroot_mushroom_house.webp",
+    "bonus": "green",
+    "cost": {
+      "blue": 1,
+      "red": 2,
+      "black": 2
+    },
+    "scene": "a modest mushroom growing hut against dark earth beside a red warm vent, blue watering can and green moss"
+  },
+  {
+    "id": 28,
+    "name": "Skyquarry Kiln",
+    "file": "card_28_skyquarry_kiln.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 2,
+      "green": 1,
+      "black": 2
+    },
+    "scene": "a tiny pottery kiln built from dark rock on a pale windy ridge, warm red fire and a few green sprouts"
+  },
+  {
+    "id": 29,
+    "name": "Frosttide Stone Store",
+    "file": "card_29_frosttide_stone_store.webp",
+    "bonus": "black",
+    "cost": {
+      "white": 2,
+      "blue": 2,
+      "red": 1
+    },
+    "scene": "a small dark-stone storehouse on a blue inlet under white frosty mist, one red hanging lamp"
+  },
+  {
+    "id": 30,
+    "name": "Cloudstone Bell House",
+    "file": "card_30_cloudstone_bell_house.webp",
+    "bonus": "white",
+    "cost": {
+      "white": 3,
+      "blue": 1,
+      "black": 1
+    },
+    "scene": "a tiny white plaster bell house high above the sea, blue roof trim and a dark stone base"
+  },
+  {
+    "id": 31,
+    "name": "Reedwater Boatyard",
+    "file": "card_31_reedwater_boatyard.webp",
+    "bonus": "blue",
+    "cost": {
+      "blue": 1,
+      "green": 3,
+      "red": 1
+    },
+    "scene": "a small boat repair shed in a green reed marsh, blue skiff and one red workshop lantern"
+  },
+  {
+    "id": 32,
+    "name": "Seagrass Nursery",
+    "file": "card_32_seagrass_nursery.webp",
+    "bonus": "green",
+    "cost": {
+      "white": 1,
+      "blue": 3,
+      "green": 1
+    },
+    "scene": "a little green plant nursery on a blue tidal terrace, small white shade cloth"
+  },
+  {
+    "id": 33,
+    "name": "Basalt Bakehouse",
+    "file": "card_33_basalt_bakehouse.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 1,
+      "red": 1,
+      "black": 3
+    },
+    "scene": "a compact bakery hollowed into dark basalt, red oven glow and pale flour-covered counter"
+  },
+  {
+    "id": 34,
+    "name": "Charcoal Smithy",
+    "file": "card_34_charcoal_smithy.webp",
+    "bonus": "black",
+    "cost": {
+      "green": 1,
+      "red": 3,
+      "black": 1
+    },
+    "scene": "a modest blackened smithy beside a red ember bed, green trees and stacked coal"
+  },
+  {
+    "id": 35,
+    "name": "Forest Crossroads Inn",
+    "file": "card_35_forest_crossroads_inn.webp",
+    "bonus": "white",
+    "cost": {
+      "blue": 1,
+      "green": 2,
+      "red": 1,
+      "black": 1
+    },
+    "scene": "a small leafy green roadside inn with blue rain barrels, one red lantern and dark stone steps"
+  },
+  {
+    "id": 36,
+    "name": "Ember Coast Chart Hut",
+    "file": "card_36_ember_coast_chart_hut.webp",
+    "bonus": "blue",
+    "cost": {
+      "white": 1,
+      "green": 1,
+      "red": 2,
+      "black": 1
+    },
+    "scene": "a little mapmaker's hut with red tiled roof, pale parchment, green potted herbs and dark stone foundation"
+  },
+  {
+    "id": 37,
+    "name": "Cavern Moss Burrow",
+    "file": "card_37_cavern_moss_burrow.webp",
+    "bonus": "green",
+    "cost": {
+      "white": 1,
+      "blue": 1,
+      "red": 1,
+      "black": 2
+    },
+    "scene": "a cozy tiny burrow built into dark earth and stone with green moss, blue trickle and warm red lamp"
+  },
+  {
+    "id": 38,
+    "name": "Cloud Orchid Cookhouse",
+    "file": "card_38_cloud_orchid_cookhouse.webp",
+    "bonus": "red",
+    "cost": {
+      "white": 2,
+      "blue": 1,
+      "green": 1,
+      "black": 1
+    },
+    "scene": "a little airy white village cookhouse with green flowers, blue rain jar and red hearth"
+  },
+  {
+    "id": 39,
+    "name": "Tidal Cave Warehouse",
+    "file": "card_39_tidal_cave_warehouse.webp",
+    "bonus": "black",
+    "cost": {
+      "white": 1,
+      "blue": 2,
+      "green": 1,
+      "red": 1
+    },
+    "scene": "a compact dark-stone warehouse at a blue tidal cave, green moss on its doorway and a red lamp"
+  }
+]
